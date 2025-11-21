@@ -6,101 +6,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Registration</title>
+    <title>Login — Fashion Store</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --bg: #f9eef2;
             --accent: #7b3b4a;
+            --accent-dark: #5e2e3a;
             --card: #ffffff;
+            --input-bg: #fff7fa;
+            --error: #c23a4d;
         }
 
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
-            background: linear-gradient(135deg, #f9eef2, #f7dce5, #f5cadd);
             height: 100vh;
+            font-family: "Poppins", sans-serif;
             display: flex;
+            background: linear-gradient(90deg, #f7d6e5 0%, #f5e9ee 100%);
             justify-content: center;
             align-items: center;
+            padding: 20px;
         }
 
         .container {
             width: 420px;
             background: var(--card);
-            padding: 30px;
-            border-radius: 18px;
-            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.15);
+            padding: 35px 32px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
             animation: fadeIn 0.6s ease-in-out;
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px);}
+            to { opacity: 1; transform: translateY(0);}
         }
 
         h2 {
             text-align: center;
-            margin-bottom: 20px;
             color: var(--accent);
-            font-size: 24px;
+            font-size: 28px;
+            margin-bottom: 20px;
+            font-weight: 600;
         }
 
         label {
-            font-weight: bold;
-            margin-top: 10px;
+            font-weight: 500;
+            margin-top: 12px;
             display: block;
+            color: #4b3a40;
+            font-size: 14px;
         }
 
         input {
             width: 100%;
-            padding: 9px;
-            margin-top: 5px;
-            border: 1px solid #c6b2b7;
-            border-radius: 6px;
-            font-size: 14px;
-            background: #fff7fa;
-        }
-
-    
-        .success {
-            background: #d1f7d8;
             padding: 10px;
-            border-left: 5px solid green;
-            color: #155d14;
-            margin-bottom: 14px;
-            border-radius: 5px;
+            margin-top: 6px;
+            border: 1px solid #c9b4ba;
+            border-radius: 8px;
+            background: var(--input-bg);
+            font-size: 14px;
         }
 
-        .error-msg {
-            color: red;
-            font-size: 14px;
-            margin-top: 6px;
-            margin-bottom: 8px;
+        input:focus {
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 4px rgba(123, 59, 74, 0.3);
         }
 
         button {
             width: 100%;
-            padding: 10px;
             background: var(--accent);
-            color: white;
-            border: none;
+            color: #fff;
+            padding: 12px;
+            margin-top: 22px;
             border-radius: 8px;
-            margin-top: 15px;
+            border: none;
             cursor: pointer;
             font-size: 16px;
+            font-weight: 600;
+            transition: 0.2s;
         }
 
         button:hover {
-            background: #5e2e3a;
+            background: var(--accent-dark);
         }
+
+        .links {
+            text-align: center;
+            margin-top: 14px;
+            font-size: 14px;
+        }
+
+        .links a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        .error-box {
+            background: #fce4e8;
+            padding: 10px;
+            border-left: 4px solid var(--error);
+            color: var(--error);
+            margin-top: 16px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
     </style>
 </head>
 
@@ -108,27 +126,33 @@
 
     <div class="container">
 
-        <h2>Create Account</h2>
+        <h2>Login</h2>
 
         <form method="POST">
             {% csrf_token %}
 
-
             <label>Username</label>
             {{ form.username }}
-
 
             <label>Password</label>
             {{ form.password }}
 
             {% if error %}
-
-            <div class="error-msg">{{ error }}</div>
+                <div class="error-box">{{ error }}</div>
             {% endif %}
 
             <button type="submit">Login</button>
 
+            <div class="links">
+                <a href="{% url 'forget' %}">Forgot Password?</a>
+            </div>
+
+            <div class="links" style="margin-top: 10px;">
+                Don't have an account? <a href="{% url 'register' %}">Create Account</a>
+            </div>
+
         </form>
+
     </div>
 
 </body>

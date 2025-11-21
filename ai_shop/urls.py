@@ -29,4 +29,12 @@ urlpatterns = [
      path('login/',LoginView.as_view(),name="login"),
 
      path('logout/',LogoutView.as_view(),name="logout"),
+
+     path('forgetmail/',ForgetEmailView.as_view(),name="forget"),
+
+    path('otpverify/',OtpVerifyView.as_view(),name="otp"),
+
+    path('resetpassword/',PasswordResetView.as_view(),name="reset"),
+
+    path('profile/',UserProfileView.as_view(),name="profile"),
 ]

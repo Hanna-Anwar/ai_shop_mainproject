@@ -1,13 +1,20 @@
 from django.shortcuts import render,redirect
 
-from user_app.forms import UserRegisterForm,LoginForm
+from user_app.forms import UserRegisterForm,LoginForm,ForgetMailForm,OtpVerifyForm,PasswordResetForm,UserProfileForm
 
-from user_app.models import CustomUserModel
+from user_app.models import CustomUserModel,UserProfileModel
 
-from django.views.generic import View
+from django.views.generic import View,CreateView
 
 from django.contrib.auth import authenticate,login,logout
 
+from django.core.mail import send_mail
+
+from django.contrib.auth.hashers import make_password
+
+from django.urls import reverse_lazy
+
+import random
 
 class UserRegisterView(View):
 
@@ -83,8 +90,129 @@ class LogoutView(View):
         logout(request)
 
         return redirect("login")
- 
+    
+class ForgetEmailView(View):
 
+    def get(self,request):
+
+        form = ForgetMailForm()
+
+        return render(request,"forget_mail.html",{"form":form})
+
+    def post(self,request):
+
+         email = request.POST.get('email')
+
+         user = CustomUserModel.objects.get(email=email)
+
+         if user:
+             
+             otp_generate = random.randint(10000,99999)
+
+             request.session['otp'] = otp_generate
+
+             request.session['email'] = email
+
+             send_mail(subject="Your Fashion Store Password Reset Code",
+                       message = f"""  
+                                 Hello,
+                                Your OTP for resetting your password is: {otp_generate}
+                                If you did not request a password reset, please ignore this email.
+                                Thank you,
+                                Fashion Store Team""",
+                                from_email= "hannaanwar469@gmail.com",
+                                recipient_list=[email],
+                                fail_silently=True)
+             
+             
+             
+             return redirect("otp")
+         
+
+class OtpVerifyView(View):
+
+    def get(self,request):
+
+        form =OtpVerifyForm()
+
+        return render(request,"otp_verify.html",{"form":form})
+    
+    def post(self,request):
+
+        form = OtpVerifyForm(request.POST)
+
+        otp = request.POST.get('otp')
+
+        if request.session.get('otp') == int(otp):
+
+            return redirect("reset")
+
+        return render(request, "otp_verify.html", {
+            "form": OtpVerifyForm(),
+            "error": "Invalid OTP!"
+        })
+    
+
+class PasswordResetView(View):
+
+    def get(self,request):
+
+        form = PasswordResetForm()
+
+        return render(request,"reset_password.html",{"form":form})
+
+    def post(self,request):
+
+        new_password = request.POST.get('new_password')
+
+        confirm_password = request.POST.get('confirm_password')
+
+        if new_password != confirm_password:
+
+            return render(request,"reset.html")
+        
+        email = request.session.get('email')
+        
+        user = CustomUserModel.objects.get(email=email)
+
+        user.password = make_password(new_password)
+
+        user.save()
+
+        return redirect("login")
+
+#Profile view
+
+
+class UserProfileView(CreateView):
+
+    model = UserProfileModel
+
+    form_class = UserProfileForm
+
+    template_name = "profile.html"
+
+    success_url = reverse_lazy("home")
+
+    def form_valid(self, form):
+
+        profile = form.save(commit=False)
+
+        profile.user = self.request.user
+
+        return super().form_valid(form)
+    
+    def dispatch(self, request, *args, **kwargs):
+        
+        # Prevent creating multiple profiles
+
+        if UserProfileModel.objects.filter(user=request.user).exists():
+
+            return redirect("profile_edit") 
+         
+        return super().dispatch(request, *args, **kwargs)
+
+    
 class HomeView(View):
 
     def get(self,request):
