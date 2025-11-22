@@ -1,0 +1,129 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fashion — My Profile</title>
+
+  <style>
+    :root{
+      --bg:#f9eef2;
+      --accent:#7b3b4a;
+      --muted:#e9d7db;
+      --card:#ffffff;
+      --text:#3a2230;
+      --radius:16px;
+    }
+
+    body{
+      margin:0;
+      background:linear-gradient(90deg, rgba(235,220,227,1), rgba(249,238,242,1));
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      color:var(--text);
+    }
+
+    .container{
+      max-width:650px;
+      margin:50px auto;
+      background:var(--card);
+      padding:30px;
+      border-radius:var(--radius);
+      box-shadow:0px 8px 30px rgba(0,0,0,0.06);
+    }
+
+    h2{
+      text-align:center;
+      color:var(--accent);
+      font-size:28px;
+      margin-bottom:20px;
+      font-weight:700;
+    }
+
+    .profile-box{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      margin-top:20px;
+    }
+
+    .item{
+      padding:12px;
+      background:#f7f1f3;
+      border-radius:10px;
+      border:1px solid var(--muted);
+    }
+
+    .item strong{
+      color:var(--accent);
+    }
+
+    .btn-edit{
+      text-decoration:none;
+      display:block;
+      margin:25px auto 0;
+      width:55%;
+      text-align:center;
+      padding:13px;
+      background:var(--accent);
+      color:white;
+      font-size:16px;
+      border-radius:var(--radius);
+      transition:0.25s;
+      font-weight:bold;
+    }
+
+    .btn-edit:hover{
+      background:#692e3f;
+      transform:scale(1.02);
+    }
+
+    @media(max-width:600px){
+      .profile-box{
+        grid-template-columns:1fr;
+      }
+      .btn-edit{
+        width:80%;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+  
+  <h2>👤 My Profile</h2>
+
+  <!-- Basic User Info -->
+  <div class="profile-box">
+    <div class="item"><strong>Full Name:</strong> {{ request.user.full_name }}</div>
+    <div class="item"><strong>Email:</strong> {{ request.user.email }}</div>
+    <div class="item"><strong>Phone:</strong> {{ request.user.mobile_no }}</div>
+  </div>
+
+  <!-- Profile Model Data -->
+  <div class="profile-box">
+
+    <div class="item"><strong>Address:</strong> {{ profile.address }}</div>
+    <div class="item"><strong>City:</strong> {{ profile.city }}</div>
+    <div class="item"><strong>State:</strong> {{ profile.state }}</div>
+    <div class="item"><strong>Pincode:</strong> {{ profile.pincode }}</div>
+    
+    <div class="item"><strong>Height:</strong> {{ profile.height }} cm</div>
+    <div class="item"><strong>Weight:</strong> {{ profile.weight }} kg</div>
+
+    <div class="item"><strong>Body Shape:</strong> {{ profile.body_shape }}</div>
+    <div class="item"><strong>Preferred Size:</strong> {{ profile.preferred_size }}</div>
+    <div class="item"><strong>Favorite Color:</strong> {{ profile.favorite_color }}</div>
+    <div class="item"><strong>Style Preference:</strong> {{ profile.style_preference }}</div>
+
+  </div>
+
+  <a href="{% url 'profile_edit' %}" class="btn-edit">✏ Edit Profile</a>
+
+</div>
+
+</body>
+</html>

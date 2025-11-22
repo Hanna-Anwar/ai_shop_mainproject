@@ -4,7 +4,7 @@ from user_app.forms import UserRegisterForm,LoginForm,ForgetMailForm,OtpVerifyFo
 
 from user_app.models import CustomUserModel,UserProfileModel
 
-from django.views.generic import View,CreateView
+from django.views.generic import View,CreateView,DetailView,UpdateView
 
 from django.contrib.auth import authenticate,login,logout
 
@@ -190,7 +190,7 @@ class UserProfileView(CreateView):
 
     form_class = UserProfileForm
 
-    template_name = "profile.html"
+    template_name = "profile_create.html"
 
     success_url = reverse_lazy("home")
 
@@ -211,6 +211,35 @@ class UserProfileView(CreateView):
             return redirect("profile_edit") 
          
         return super().dispatch(request, *args, **kwargs)
+
+#detail view 
+class ProfileShowView(DetailView):
+
+    model = UserProfileModel
+
+    template_name = "profile_show.html"
+
+    context_object_name = "profile"
+
+    def get_object(self):
+
+        return UserProfileModel.objects.get(user =self.request.user)
+    
+
+#updateview
+class ProfileEditView(UpdateView):
+
+    model = UserProfileModel
+
+    template_name = "profile_edit.html"
+
+    form_class = UserProfileForm  # update fields
+
+    success_url = reverse_lazy("profile_show")
+
+    def get_object(self):
+
+        return UserProfileModel.objects.get(user=self.request.user)
 
     
 class HomeView(View):

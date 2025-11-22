@@ -36,5 +36,9 @@ urlpatterns = [
 
     path('resetpassword/',PasswordResetView.as_view(),name="reset"),
 
-    path('profile/',UserProfileView.as_view(),name="profile"),
+    path('profilecreate/',UserProfileView.as_view(),name="profile_create"),
+
+    path('profileshow/',ProfileShowView.as_view(),name="profile_show"),
+
+    path('profileedit/',ProfileEditView.as_view(),name="profile_edit"),
 ]
