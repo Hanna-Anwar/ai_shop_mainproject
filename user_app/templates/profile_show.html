@@ -8,120 +8,207 @@
 
   <style>
     :root{
-      --bg:#f9eef2;
-      --accent:#7b3b4a;
-      --muted:#e9d7db;
-      --card:#ffffff;
-      --text:#3a2230;
-      --radius:16px;
+      --primary:#2a4dd9;
+      --light:#f5f7ff;
+      --border:#d7dcf8;
+      --text:#1f1f1f;
     }
 
     body{
       margin:0;
-      background:linear-gradient(90deg, rgba(235,220,227,1), rgba(249,238,242,1));
-      font-family: "Helvetica Neue", Arial, sans-serif;
-      color:var(--text);
+      font-family:'Segoe UI',sans-serif;
+      background:#eef2ff;
     }
 
-    .container{
-      max-width:650px;
-      margin:50px auto;
-      background:var(--card);
-      padding:30px;
-      border-radius:var(--radius);
-      box-shadow:0px 8px 30px rgba(0,0,0,0.06);
+    /* NAVBAR */
+    .navbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:14px 38px;
+      background:white;
+      box-shadow:0 2px 8px rgba(0,0,0,0.08);
+      position:sticky;
+      top:0;
+      z-index:10;
     }
 
-    h2{
-      text-align:center;
-      color:var(--accent);
-      font-size:28px;
-      margin-bottom:20px;
-      font-weight:700;
+    .logo{
+      font-weight:bold;
+      font-size:22px;
+      color:var(--primary);
     }
 
-    .profile-box{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:18px;
-      margin-top:20px;
+    .nav-links{
+      display:flex;
+      gap:24px;
+      font-size:15px;
+      align-items:center;
     }
 
-    .item{
-      padding:12px;
-      background:#f7f1f3;
-      border-radius:10px;
-      border:1px solid var(--muted);
-    }
-
-    .item strong{
-      color:var(--accent);
-    }
-
-    .btn-edit{
+    .nav-links a{
       text-decoration:none;
-      display:block;
-      margin:25px auto 0;
-      width:55%;
-      text-align:center;
-      padding:13px;
-      background:var(--accent);
+      color:#333;
+      font-weight:500;
+    }
+
+    /* Avatar */
+    .profile-circle{
+      width:38px;
+      height:38px;
+      border-radius:50%;
+      background:var(--primary);
       color:white;
-      font-size:16px;
-      border-radius:var(--radius);
-      transition:0.25s;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    /* Profile Section */
+    .profile-container{
+      width:90%;
+      max-width:850px;
+      margin:30px auto;
+      background:white;
+      padding:25px;
+      border-radius:14px;
+      box-shadow:0px 8px 26px rgba(0,0,0,0.07);
+    }
+
+    .heading{
+      text-align:center;
+      font-size:28px;
+      font-weight:700;
+      color:var(--primary);
+      margin-bottom:18px;
+    }
+
+    .summary-box{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      background:var(--light);
+      padding:18px;
+      border-radius:10px;
+      border:1px solid var(--border);
+      margin-bottom:25px;
+    }
+
+    .username{
+      font-size:20px;
+      font-weight:600;
+    }
+
+    .edit-btn{
+      padding:8px 18px;
+      border:none;
+      background:var(--primary);
+      color:white;
+      cursor:pointer;
+      border-radius:6px;
       font-weight:bold;
     }
 
-    .btn-edit:hover{
-      background:#692e3f;
-      transform:scale(1.02);
+    .section{
+      margin-top:25px;
     }
 
-    @media(max-width:600px){
-      .profile-box{
-        grid-template-columns:1fr;
-      }
-      .btn-edit{
-        width:80%;
-      }
+    .section-title{
+      font-size:20px;
+      font-weight:bold;
+      color:var(--primary);
+      margin-bottom:14px;
     }
+
+    .detail-box{
+      background:#f3f7ff;
+      padding:15px;
+      border-radius:10px;
+      border:1px solid var(--border);
+      margin-bottom:15px;
+    }
+
+    .detail-row{
+      padding:8px 0;
+      font-size:15px;
+      border-bottom:1px solid #e3ecff;
+    }
+    .detail-row:last-child{
+      border-bottom:0;
+    }
+
+    .logout{
+      display:block;
+      width:100%;
+      margin-top:25px;
+      padding:12px;
+      background:red;
+      color:white;
+      border:none;
+      font-weight:bold;
+      cursor:pointer;
+      border-radius:8px;
+      transition:.3s;
+    }
+
+    .logout:hover{ opacity:.8; }
 
   </style>
 </head>
-
 <body>
 
-<div class="container">
-  
-  <h2>👤 My Profile</h2>
+<!-- NAVBAR -->
+<div class="navbar">
+  <div class="logo">Fashion</div>
 
-  <!-- Basic User Info -->
-  <div class="profile-box">
-    <div class="item"><strong>Full Name:</strong> {{ request.user.full_name }}</div>
-    <div class="item"><strong>Email:</strong> {{ request.user.email }}</div>
-    <div class="item"><strong>Phone:</strong> {{ request.user.mobile_no }}</div>
+  <div class="nav-links">
+    <a href="{% url 'home' %}">Home</a>
+    <a href="">Wishlist</a>
+    <a href="">Orders</a>
+    <a href="{% url 'logout' %}">Logout</a>
+
+    <div class="profile-circle">
+      {{ user.full_name|slice:":2"|upper }}
+    </div>
+  </div>
+</div>
+
+
+<div class="profile-container">
+
+  <div class="heading">My Profile</div>
+
+  <div class="summary-box">
+      <div>
+        <div class="username">{{ user.full_name }} </div>
+        <div>{{ user.email }}</div>
+      </div>
+      <a href="{% url 'profile_edit' %}">
+        <button class="edit-btn">Edit</button>
+      </a>
   </div>
 
-  <!-- Profile Model Data -->
-  <div class="profile-box">
+  <!-- Personal Details Included (Your request) -->
+  <div class="section">
+    <div class="section-title">Personal Details</div>
 
-    <div class="item"><strong>Address:</strong> {{ profile.address }}</div>
-    <div class="item"><strong>City:</strong> {{ profile.city }}</div>
-    <div class="item"><strong>State:</strong> {{ profile.state }}</div>
-    <div class="item"><strong>Pincode:</strong> {{ profile.pincode }}</div>
-    
-    <div class="item"><strong>Height:</strong> {{ profile.height }} cm</div>
-    <div class="item"><strong>Weight:</strong> {{ profile.weight }} kg</div>
-
-    <div class="item"><strong>Body Shape:</strong> {{ profile.body_shape }}</div>
-    <div class="item"><strong>Preferred Size:</strong> {{ profile.preferred_size }}</div>
-    <div class="item"><strong>Favorite Color:</strong> {{ profile.favorite_color }}</div>
-    <div class="item"><strong>Style Preference:</strong> {{ profile.style_preference }}</div>
+    <div class="detail-box">
+        <div class="detail-row">📍 <strong>Address:</strong> {{ profile.address }}</div>
+        <div class="detail-row">🏙 <strong>City:</strong> {{ profile.city }}</div>
+        <div class="detail-row">🧷 <strong>State:</strong> {{ profile.state }}</div>
+        <div class="detail-row">📦 <strong>Pincode:</strong> {{ profile.pincode }}</div>
+        <div class="detail-row">📏 <strong>Height:</strong> {{ profile.height }} cm</div>
+        <div class="detail-row">⚖ <strong>Weight:</strong> {{ profile.weight }} kg</div>
+        <div class="detail-row">👗 <strong>Preferred Size:</strong> {{ profile.preferred_size }}</div>
+        <div class="detail-row">🎨 <strong>Favorite Color:</strong> {{ profile.favorite_color }}</div>
+        <div class="detail-row">✨ <strong>Style:</strong> {{ profile.style_preference }}</div>
+    </div>
 
   </div>
 
-  <a href="{% url 'profile_edit' %}" class="btn-edit">✏ Edit Profile</a>
+
 
 </div>
 

@@ -6,121 +6,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Registration</title>
+    <title>Forgot Password</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --bg: #f9eef2;
-            --accent: #7b3b4a;
-            --card: #ffffff;
+            --accent: #2a6f97;
+            --accent-dark: #1f5878;
+            --input-bg: #f0faff;
+            --border: #9cc7d2;
         }
 
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
-           background: linear-gradient(90deg, rgba(235,220,227,1) 0%, rgba(249,238,242,1) 100%);
             height: 100vh;
+            background: linear-gradient(90deg, #c9efff 0%, #e7faff 100%);
             display: flex;
             justify-content: center;
             align-items: center;
+            font-family: "Poppins", sans-serif;
         }
 
-        .container {
-            width: 420px;
-            background: var(--card);
-            padding: 30px;
+        .card {
+            width: 380px;
+            background: white;
             border-radius: 18px;
-            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 8px 22px rgba(0,0,0,0.15);
             animation: fadeIn 0.6s ease-in-out;
+            overflow: hidden;
+        }
+
+        .wave-header {
+            height: 105px;
+            background: linear-gradient(135deg, #4da3c4, #84d2f6);
+            clip-path: ellipse(68% 50% at 50% 15%);
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .content {
+            padding: 25px;
         }
 
         h2 {
             text-align: center;
-            margin-bottom: 20px;
             color: var(--accent);
-            font-size: 24px;
+            font-size: 22px;
+            margin-top: -45px;
+            margin-bottom: 20px;
         }
 
         label {
-            font-weight: bold;
-            margin-top: 10px;
+            font-weight: 500;
             display: block;
+            margin-top: 10px;
+            color: #1a2b33;
+            font-size: 14px;
         }
 
         input {
             width: 100%;
-            padding: 9px;
-            margin-top: 5px;
-            border: 1px solid #c6b2b7;
-            border-radius: 6px;
-            font-size: 14px;
-            background: #fff7fa;
-        }
-
-    
-        .success {
-            background: #d1f7d8;
             padding: 10px;
-            border-left: 5px solid green;
-            color: #155d14;
-            margin-bottom: 14px;
-            border-radius: 5px;
+            margin-top: 6px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--input-bg);
+            font-size: 14px;
         }
 
-        .error-msg {
-            color: red;
-            font-size: 14px;
-            margin-top: 6px;
-            margin-bottom: 8px;
+        input:focus {
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 4px rgba(42, 111, 151, 0.4);
         }
 
         button {
             width: 100%;
-            padding: 10px;
             background: var(--accent);
             color: white;
+            padding: 12px;
+            margin-top: 20px;
             border: none;
             border-radius: 8px;
-            margin-top: 15px;
-            cursor: pointer;
             font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .3s;
         }
 
         button:hover {
-            background: #5e2e3a;
+            background: var(--accent-dark);
         }
+
+        .success, .error-msg {
+            margin-top: 12px;
+            font-size: 14px;
+        }
+
+        .error-msg {
+            color: red;
+        }
+
     </style>
 </head>
 
 <body>
 
-    <div class="container">
+    <div class="card">
 
-        <h2>Enter Your Email to Reset Password</h2>
+        <div class="wave-header"></div>
 
-        <form method="post">
-            {% csrf_token %}
+        <div class="content">
 
+            <h2>Reset Password</h2>
 
-            <label>Email</label>
-            {{ form.email }}
+            <form method="post">
+                {% csrf_token %}
 
+                <label>Enter Email</label>
+                {{ form.email }}
 
-            <button type="submit">Submit</button>
+                {% if error %}
+                    <div class="error-msg">{{ error }}</div>
+                {% endif %}
 
-        </form>
+                <button type="submit">Send OTP</button>
+            </form>
+        </div>
     </div>
 
 </body>

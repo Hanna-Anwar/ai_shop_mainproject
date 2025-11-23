@@ -12,177 +12,167 @@
 
     <style>
         :root {
-            --accent: #7b3b4a;
-            --accent-dark: #5e2e3a;
-            --card: #ffffff;
-            --input-bg: #fff7fa;
-            --error: #c23a4d;
-            --success-bg: #d9f7e3;
-            --success-text: #0f6b2d;
+            --primary: #2a6f97;
+            --text-dark: #1a2b33;
+            --border: #9cc7d2;
+            --input-bg: #f7fcff;
         }
 
         body {
             margin: 0;
             height: 100vh;
-            font-family: "Poppins", sans-serif;
+            background: #c9f3ff;
             display: flex;
-            background: linear-gradient(90deg, #f7d6e5 0%, #f5e9ee 100%);
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            font-family: "Poppins", sans-serif;
         }
 
-        .container {
-            width: 420px;
-            background: var(--card);
-            padding: 35px 32px;
-            border-radius: 20px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-            animation: fadeIn 0.6s ease-in-out;
+        .card {
+            width: 370px; /* shorter width */
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.10);
+            overflow: hidden;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px);}
-            to { opacity: 1; transform: translateY(0);}
+        .wave-header {
+            height: 95px; /* smaller wave */
+            background: linear-gradient(135deg, #4da3c4, #84d2f6);
+            clip-path: ellipse(70% 45% at 50% 10%);
+        }
+
+        .content {
+            padding: 22px; 
         }
 
         h2 {
             text-align: center;
-            color: var(--accent);
-            font-size: 28px;
-            margin-bottom: 20px;
+            font-size: 20px;
             font-weight: 600;
+            color: var(--text-dark);
+            margin-top: -35px; 
+            margin-bottom: 18px;
         }
 
         label {
-            font-weight: 500;
-            margin-top: 12px;
             display: block;
-            color: #4b3a40;
-            font-size: 14px;
+            margin-top: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-dark);
         }
 
         input {
             width: 100%;
-            padding: 10px;
-            margin-top: 6px;
-            border: 1px solid #c9b4ba;
-            border-radius: 8px;
+            padding: 9px;
+            margin-top: 3px;
             background: var(--input-bg);
-            font-size: 14px;
-        }
-
-        input:focus {
-            border-color: var(--accent);
-            outline: none;
-            box-shadow: 0 0 4px rgba(123, 59, 74, 0.3);
-        }
-
-        .success {
-            background: var(--success-bg);
-            padding: 12px;
-            border-left: 5px solid var(--success-text);
-            color: var(--success-text);
-            margin-top: 18px;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .error-box {
-            background: #fce4e8;
-            padding: 10px;
-            border-left: 4px solid var(--error);
-            color: var(--error);
-            margin-top: 16px;
-            border-radius: 6px;
-            font-size: 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 13px;
         }
 
         button {
             width: 100%;
-            background: var(--accent);
-            color: #fff;
-            padding: 12px;
-            margin-top: 22px;
-            border-radius: 8px;
+            background: var(--primary);
+            color: white;
+            padding: 11px;
             border: none;
-            cursor: pointer;
-            font-size: 16px;
+            border-radius: 8px;
+            font-size: 15px;
             font-weight: 600;
-            transition: 0.2s;
+            margin-top: 15px;
+            cursor: pointer;
         }
 
         button:hover {
-            background: var(--accent-dark);
+            background: #1e5674;
         }
 
         .links {
             text-align: center;
-            margin-top: 14px;
-            font-size: 14px;
+            margin-top: 12px;
+            font-size: 13px;
         }
 
         .links a {
-            color: var(--accent);
+            color: var(--primary);
+            font-weight: 500;
             text-decoration: none;
         }
 
-        .links a:hover {
-            text-decoration: underline;
+        .success, .error-box {
+            padding: 8px;
+            margin-top: 8px;
+            border-radius: 6px;
+            font-size: 12px;
         }
 
+        .success {
+            background: #d9f7e3;
+            color: #0f6b2d;
+        }
+
+        .error-box {
+            background: #ffe6e6;
+            color: #b10000;
+        }
     </style>
 </head>
 
 <body>
 
-    <div class="container">
+    <div class="card">
 
-        <h2>Create Account</h2>
+        <div class="wave-header"></div>
 
-        <form method="POST">
-            {% csrf_token %}
+        <div class="content">
+            <h2>Create Account</h2>
 
-            <label>Username</label>
-            {{ form.username }}
+            <form method="POST">
+                {% csrf_token %}
 
-            <label>Full Name</label>
-            {{ form.full_name }}
+                <label>Username</label>
+                {{ form.username }}
 
-            <label>Email</label>
-            {{ form.email }}
+                <label>Full Name</label>
+                {{ form.full_name }}
 
-            <label>Mobile Number</label>
-            {{ form.mobile_no }}
+                <label>Email</label>
+                {{ form.email }}
 
-            <label>Password</label>
-            {{ form.password1 }}
+                <label>Mobile Number</label>
+                {{ form.mobile_no }}
 
-            <label>Confirm Password</label>
-            {{ form.password2 }}
+                <label>Password</label>
+                {{ form.password1 }}
 
-            {% if msg %}
-                <div class="success">{{ msg }}</div>
-            {% endif %}
+                <label>Confirm Password</label>
+                {{ form.password2 }}
 
-            {% if form.errors %}
-                <div class="error-box">
-                    {% for field, errors in form.errors.items %}
-                        {% for error in errors %}
-                            <div>{{ error }}</div>
+                {% if msg %}
+                    <div class="success">{{ msg }}</div>
+                {% endif %}
+
+                {% if form.errors %}
+                    <div class="error-box">
+                        {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
                         {% endfor %}
-                    {% endfor %}
+                    </div>
+                {% endif %}
+
+                <button type="submit">Sign Up</button>
+
+                <div class="links">
+                    Already have an account? <a href="{% url 'login' %}">Login</a>
                 </div>
-            {% endif %}
 
-            <button type="submit">Register</button>
-
-            <div class="links">
-                Already have an account? <a href="{% url 'login' %}">Login</a>
-            </div>
-
-        </form>
+            </form>
+        </div>
     </div>
 
 </body>
