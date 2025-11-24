@@ -2,6 +2,7 @@
 
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -10,264 +11,318 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    body{
-      margin:0;
-      font-family:'Poppins', sans-serif;
-      background:#ffffff;
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #ffffff;
     }
 
-    /* ===================== HEADER ===================== */
-    .top-header{
-      background:#000;
-      color:#fff;
-      padding:10px 28px;
-      display:flex;
-      justify-content:space-between;
-      font-size:14px;
+    /* ===================== NAVBAR ===================== */
+    nav.main-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 28px;
+      font-weight: 500;
+      position: sticky;
+      top: 0;
+      background: white;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     }
 
-    nav.main-nav{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:18px 28px;
-      font-weight:500;
+    nav .logo {
+      font-size: 26px;
+      font-weight: 700;
+      color: #111;
     }
 
-    nav .logo{
-      font-size:24px;
-      font-weight:700;
-      color:#111;
+    nav ul {
+      display: flex;
+      gap: 25px;
+      align-items: center;
+      list-style: none;
+      padding: 0;
     }
 
-    nav ul{
-      display:flex;
-      gap:25px;
-      align-items:center;
-      list-style:none;
-      padding:0;
+    nav ul li a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+      transition: 0.3s;
     }
 
-    nav ul li a{
-      text-decoration:none;
-      color:#333;
-      font-weight:500;
+    nav ul li a:hover {
+      color: #4A72FF;
     }
 
-    .btn-primary{
-      padding:10px 22px;
-      border-radius:30px;
-      color:white;
-      background:#4A72FF;
-      border:none;
-      cursor:pointer;
-      text-decoration:none;
-      font-weight:600;
+    .btn-primary {
+      padding: 12px 28px;
+      border-radius: 30px;
+      color: white;
+      background: #4A72FF;
+      border: none;
+      display: inline-block;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 600;
+      transition: .3s;
     }
 
-    /* =============== Profile Avatar Dropdown =============== */
+    .btn-primary:hover {
+      background: #3257e6;
+    }
+
+    /* ===================== PROFILE ===================== */
+
     .profile-menu {
       position: relative;
-      display: inline-block;
       cursor: pointer;
     }
 
     .avatar {
-      width: 38px;
-      height: 38px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
-      background:#4A72FF;
-      color:white;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      font-weight:700;
-      font-size:16px;
+      background: #4A72FF;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 700;
+      font-size: 16px;
     }
 
     .dropdown {
-      display:none;
-      position:absolute;
-      right:0;
-      top:50px;
-      background:white;
-      width:180px;
-      border-radius:10px;
-      box-shadow:0 6px 16px rgba(0,0,0,0.1);
-      padding:12px;
-      z-index:10;
-    }
-
-    .dropdown p {
-      margin: 0 0 8px;
-      font-weight:600;
-      color:#333;
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 50px;
+      background: white;
+      width: 190px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+      padding: 14px;
     }
 
     .dropdown a {
-      display:block;
-      text-decoration:none;
-      color:#333;
-      padding:6px 0;
-      font-size:14px;
-    }
-
-    .dropdown hr{
-      border:none;
-      height:1px;
-      background:#ddd;
-      margin:6px 0;
+      display: block;
+      text-decoration: none;
+      color: #333;
+      padding: 6px 0;
+      font-size: 15px;
     }
 
     .profile-menu:hover .dropdown {
-      display:block;
+      display: block;
     }
+
 
     /* ===================== HERO SECTION ===================== */
-    .hero{
-      background:#CBE7FF;
-      padding:60px 40px;
-      display:grid;
-      grid-template-columns: repeat(auto-fit,minmax(450px,1fr));
-      align-items:center;
+
+    .hero {
+      background: linear-gradient(135deg, #E7F1FF, #CBE7FF);
+      padding: 120px 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 60px;
+      flex-wrap: wrap;
     }
 
-    .hero h1{
-      font-size:54px;
-      font-weight:700;
-      margin:0;
+    .hero-text {
+      max-width: 480px;
+      animation: fadeIn 1s ease-in-out;
     }
 
-    .hero p{
-      color:#555;
-      margin:10px 0 28px;
+    .hero h1 {
+      font-size: 64px;
+      font-weight: 700;
+      line-height: 1.1;
+      margin: 12px 0;
     }
 
-    .hero img{
-      width:100%;
-      max-height:400px;
-      object-fit:contain;
+    .hero p {
+      color: #555;
+      margin: 10px 0 28px;
+      font-size: 18px;
     }
 
-    .badge{
-      color:#4A72FF;
-      font-weight:600;
-      font-size:18px;
+    .hero img {
+      width: 460px;
+      max-width: 100%;
+      object-fit: contain;
+      border-radius: 14px;
+      box-shadow: 0px 25px 45px rgba(0, 0, 0, 0.10);
+      transition: transform .4s ease;
     }
 
-    /* ===================== CATEGORIES ===================== */
-    .section-title{
-      text-align:center;
-      margin-top:60px;
-      font-size:28px;
-      font-weight:700;
+    .hero img:hover {
+      transform: translateY(-6px);
     }
 
-    .categories{
-      max-width:1100px;
-      margin:30px auto;
-      display:grid;
-      grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
-      gap:22px;
-      padding:0 20px;
+    .badge {
+      display: inline-block;
+      background: #4A72FF;
+      color: white;
+      padding: 8px 20px;
+      font-size: 15px;
+      border-radius: 30px;
     }
 
-    .cat-box{
-      background:#fff;
-      border-radius:18px;
-      overflow:hidden;
-      text-align:center;
-      box-shadow:0 10px 25px rgba(0,0,0,0.05);
-      transition:transform .3s ease;
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
-    .cat-box:hover{
-      transform:translateY(-8px);
+    /* ===================== CATEGORY SECTION ===================== */
+
+    .section-title {
+      text-align: center;
+      margin-top: 70px;
+      font-size: 30px;
+      font-weight: 700;
     }
 
-    .cat-box img{
-      width:100%;
-      height:300px;
-      object-fit:cover;
+    .categories {
+      max-width: 1100px;
+      margin: 30px auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 25px;
+      padding: 0 20px;
     }
 
-    .cat-box h3{
-      margin:18px 0;
-      font-size:22px;
-      font-weight:600;
+    .cat-box {
+      background: #fff;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      transition: transform .3s ease;
+      text-align: center;
+      display: block;
+      text-decoration: none;
+      color: black;
     }
 
+    .cat-box:hover {
+      transform: translateY(-10px);
+    }
+
+    .cat-box img {
+      width: 100%;
+      height: 360px;
+      object-fit: cover;
+    }
+
+    .cat-box h3 {
+      margin: 14px 0;
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    @media(max-width:768px) {
+      .hero h1 {
+        font-size: 45px;
+      }
+
+      .hero {
+        padding: 60px 20px;
+      }
+    }
+
+    
   </style>
 </head>
+
 <body>
 
-<!-- Top black bar -->
-<!-- <div class="top-header">
-  <div>🇺🇸 USA</div>
-  <div>📞 +777 2345 7886</div>
-</div> -->
+  <!-- NAV -->
+  <nav class="main-nav">
+    <div class="logo">Glamio</div>
 
+    <ul>
+      <li><a href="{% url 'home' %}">Home</a></li>
+      <li><a href="#">Category</a></li>
+      <li><a href="#">Latest</a></li>
+      <li><a href="#">Blog</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
 
-<nav class="main-nav">
-  <div class="logo">Glamio</div>
-
-  <ul>
-    <li><a href="{% url 'home' %}">Home</a></li>
-    <li><a href="#">Category</a></li>
-    <li><a href="#">Latest</a></li>
-    <li><a href="#">Blog</a></li>
-    <li><a href="#">Contact</a></li>
-  </ul>
-
-  <div>
-
-    {% if user.is_authenticated %}
-
-    <!-- Logged-in state -->
-    <div class="profile-menu">
-        <div class="avatar">
-            {{ user.full_name|slice:":2"|upper }}
-        </div>
-
+    <div>
+      {% if user.is_authenticated %}
+      <div class="profile-menu">
+        <div class="avatar">{{ user.full_name|slice:":2"|upper }}</div>
         <div class="dropdown">
           <p>Hello {{ user.username }}</p>
           <a href="{% url 'profile_show' %}">My Profile</a>
-          <a href="#">My Orders</a>
           <a href="#">Wishlist</a>
+          <a href="#">Orders</a>
           <hr>
           <a href="{% url 'logout' %}">Logout</a>
         </div>
+      </div>
+      {% else %}
+      <a href="{% url 'login' %}" class="btn-primary"
+        style="background:#fff;border:2px solid #4A72FF;color:#4A72FF; margin-right:10px;">Login</a>
+      <a href="{% url 'register' %}" class="btn-primary">Sign up</a>
+      {% endif %}
+    </div>
+  </nav>
+
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-text">
+      <span class="badge">✨ Limited Offer</span>
+      <h1>Winter Collection</h1>
+      <p>Experience premium comfort and style — crafted for 2025 fashion trends.</p>
+      <a href="#" class="btn-primary">Shop Now</a>
     </div>
 
-    {% else %}
-    <!-- Guest state -->
-    <a href="{% url 'login' %}" class="btn-primary" style="background:#fff;border:2px solid #4A72FF;color:#4A72FF;margin-right:10px;">Login</a>
-    <a href="{% url 'register' %}" class="btn-primary">Sign up</a>
-    {% endif %}
+    <img src="{% static 'images/banne_page.png' %}" alt="Winter Fashion">
+  </section>
 
-  </div>
-</nav>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-text">
-    <p class="badge">60% Discount</p>
-    <h1>Winter<br>Collection</h1>
-    <p>Best Cloth Collection of 2025</p>
-    <a href="#" class="btn-primary">Shop Now</a>
-  </div>
-  <img src="{% static 'images/frok1.png' %}" alt="Hero">
-</section>
+  <!-- SHOP BY CATEGORY -->
+  <h2 class="section-title">Shop by Category</h2>
 
-<!-- CATEGORY SECTION -->
-<h2 class="section-title">Shop by Category</h2>
 <div class="categories">
-  <div class="cat-box"><img src="" alt=""><h3>Casual</h3></div>
-  <div class="cat-box"><img src="" alt=""><h3>Office Wear</h3></div>
-  <div class="cat-box"><img src="" alt=""><h3>Party Wear</h3></div>
-  <div class="cat-box"><img src="" alt=""><h3>Ethnic Wear</h3></div>
-  <div class="cat-box"><img src="" alt=""><h3>Sports Wear</h3></div>
+
+  <a href="" class="cat-box">
+    <img src="{% static 'images/casual_cover.png' %}" alt="Casual">
+    <h3>Casual</h3>
+  </a>
+
+  <a href="" class="cat-box">
+    <img src="{% static 'images/office_cover.png' %}" alt="Office Wear">
+    <h3>Office Wear</h3>
+  </a>
+
+  <a href="" class="cat-box">
+    <img src="{% static 'images/ethnic_cover.png' %}" alt="Ethnic Wear">
+    <h3>Ethnic Wear</h3>
+  </a>
+
+  <a href="" class="cat-box">
+    <img src="{% static 'images/codeset_cover.png' %}" alt="Co-ord Sets">
+    <h3>Co-ord Sets</h3>
+  </a>
+
+  <a href="" class="cat-box">
+    <img src="{% static 'images/sports_cover.png' %}" alt="Sports Wear">
+    <h3>Sports Wear</h3>
+  </a>
+
 </div>
 
 </body>
+
 </html>
