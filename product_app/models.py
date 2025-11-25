@@ -62,7 +62,7 @@ class ProductModel(models.Model):
 
             counter = 1
 
-            while Product.objects.filter(slug=slug).exists():
+            while ProductModel.objects.filter(slug=slug).exists():
 
                 slug = f"{base_slug}-{counter}"
 

@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block extra_css %}
+<style>
+.product-detail {
+    max-width: 1200px;
+    margin: 40px auto;
+    display: flex;
+    gap: 40px;
+    padding: 0 20px;
+    flex-wrap: wrap;
+}
+
+.product-detail img {
+    width: 500px;
+    max-width: 100%;
+    border-radius: 14px;
+    box-shadow: 0px 25px 45px rgba(0,0,0,0.10);
+    object-fit: cover;
+}
+
+.product-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-info h1 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.product-info p.price {
+    font-size: 24px;
+    font-weight: 600;
+    color: #4A72FF;
+    margin-bottom: 20px;
+}
+
+.product-info p.description {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 30px;
+}
+
+.btn-primary {
+    padding: 12px 28px;
+    border-radius: 30px;
+    color: white;
+    background: #4A72FF;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 600;
+    width: max-content;
+}
+
+.btn-primary:hover {
+    background: #3257e6;
+}
+
+@media(max-width:768px) {
+    .product-detail {
+        flex-direction: column;
+        align-items: center;
+    }
+    .product-info {
+        width: 100%;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="product-detail">
+    <div class="product-image">
+        {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        {% else %}
+            <img src="{% static 'images/default_product.png' %}" alt="{{ product.name }}">
+        {% endif %}
+    </div>
+
+    <div class="product-info">
+        <h1>{{ product.name }}</h1>
+        <p class="price">₹{{ product.price }}</p>
+        <p class="description">{{ product.description }}</p>
+        <a href="#" class="btn-primary">Add to Cart</a>
+    </div>
+</div>
+{% endblock %}

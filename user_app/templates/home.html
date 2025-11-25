@@ -259,7 +259,7 @@
     <div>
       {% if user.is_authenticated %}
       <div class="profile-menu">
-        <div class="avatar">{{ user.full_name|slice:":2"|upper }}</div>
+        <div class="avatar">{{ user.username|slice:":2"|upper }}</div>
         <div class="dropdown">
           <p>Hello {{ user.username }}</p>
           <a href="{% url 'profile_show' %}">My Profile</a>

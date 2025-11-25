@@ -25,6 +25,8 @@ from django.conf.urls.static import static
 
 from user_app.views import *
 
+from product_app.views import *
+
 urlpatterns = [
     path('admin/', admin.site.urls),
 
@@ -47,6 +49,12 @@ urlpatterns = [
     path('profileshow/',ProfileShowView.as_view(),name="profile_show"),
 
     path('profileedit/',ProfileEditView.as_view(),name="profile_edit"),
+
+    path('products/', ProductListView.as_view(), name='product_list'), 
+
+    path('product/<slug:slug>/', ProductDetailView.as_view(), name='product_detail'),  # Detail page
+
+
 ]
 
 

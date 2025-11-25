@@ -1,0 +1,161 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{% block title %}Glamio{% endblock %}</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body { margin:0; font-family:'Poppins', sans-serif; background:#fff; }
+
+    /* NAVBAR */
+    nav.main-nav { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 18px 28px; 
+    font-weight: 500; 
+    position: sticky; 
+    top: 0; 
+    background: white; 
+    z-index: 100; 
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05); 
+}
+
+nav .logo { 
+    font-size: 26px; 
+    font-weight: 700; 
+    color: #111; 
+}
+
+nav ul { 
+    display: flex; 
+    gap: 25px; 
+    list-style: none; 
+    padding: 0; 
+    margin: 0; 
+}
+
+nav ul li a { 
+    text-decoration: none; 
+    color: #333; 
+    font-weight: 500; 
+    transition: 0.3s; 
+}
+
+nav ul li a:hover { 
+    color: #4A72FF; 
+}
+
+.btn-primary { 
+    padding: 12px 28px; 
+    border-radius: 30px; 
+    color: white; 
+    background: #4A72FF; 
+    border: none; 
+    cursor: pointer; 
+    text-decoration: none; 
+    font-weight: 600; 
+    transition: .3s; 
+}
+
+.btn-primary:hover { 
+    background: #3257e6; 
+}
+
+.profile-menu { 
+    position: relative; 
+    cursor: pointer; 
+}
+
+.avatar { 
+    width: 40px; 
+    height: 40px; 
+    border-radius: 50%; 
+    background: #4A72FF; 
+    color: white; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    font-weight: 700; 
+    font-size: 16px; 
+}
+
+.dropdown { 
+    display: none; 
+    position: absolute; 
+    right: 0; 
+    top: 50px; 
+    background: white; 
+    width: 190px; 
+    border-radius: 12px; 
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12); 
+    padding: 14px; 
+}
+
+.dropdown a { 
+    display: block; 
+    text-decoration: none; 
+    color: #333; 
+    padding: 6px 0; 
+    font-size: 15px; 
+}
+
+.profile-menu:hover .dropdown { 
+    display: block; 
+}
+
+    @media(max-width:768px) {
+      nav ul { gap:15px; }
+    }
+  </style>
+
+  {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="main-nav">
+    <div class="logo">Glamio</div>
+    <ul>
+      <li><a href="{% url 'product_list' %}">Home</a></li>
+      <li><a href="#">Category</a></li>
+      <li><a href="#">Latest</a></li>
+      <li><a href="#">Blog</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+
+    <div>
+      {% if user.is_authenticated %}
+      <div class="profile-menu">
+        <div class="avatar">{{ user.username|slice:":2"|upper }}</div>
+        <div class="dropdown">
+          <p>Hello {{ user.username }}</p>
+          <a href="#">My Profile</a>
+          <a href="#">Wishlist</a>
+          <a href="#">Orders</a>
+          <hr>
+          <a href="{% url 'logout' %}">Logout</a>
+        </div>
+      </div>
+      {% else %}
+      <a href="{% url 'login' %}" class="btn-primary" style="background:#fff;border:2px solid #4A72FF;color:#4A72FF; margin-right:10px;">Login</a>
+      <a href="{% url 'register' %}" class="btn-primary">Sign up</a>
+      {% endif %}
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  {% block extra_js %}{% endblock %}
+
+</body>
+</html>
