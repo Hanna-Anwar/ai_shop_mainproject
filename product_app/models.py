@@ -44,6 +44,8 @@ class ProductModel(models.Model):
 
     sizes_available = models.CharField(max_length=50, help_text="Use comma separated values e.g. XS,S,M")
 
+    material = models.CharField(max_length=100, blank=True, null=True)
+
     color = models.CharField(max_length=50)
 
     created_at = models.DateTimeField(auto_now_add=True)
