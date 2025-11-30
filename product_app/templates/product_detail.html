@@ -1,96 +1,233 @@
 {% extends "base.html" %}
-
 {% load static %}
 
 {% block title %}{{ product.name }}{% endblock %}
 
 {% block extra_css %}
 <style>
-.product-detail {
-    max-width: 1200px;
-    margin: 40px auto;
-    display: flex;
-    gap: 40px;
-    padding: 0 20px;
-    flex-wrap: wrap;
-}
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-.product-detail img {
-    width: 500px;
-    max-width: 100%;
-    border-radius: 14px;
-    box-shadow: 0px 25px 45px rgba(0,0,0,0.10);
-    object-fit: cover;
-}
+    .product-page {
+        background: linear-gradient(135deg, #E7F1FF, #CBE7FF);
+        padding: 60px 0;
+        font-family: 'Poppins', sans-serif;
+    }
 
-.product-info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.product-info h1 {
-    font-size: 32px;
-    font-weight: 700;
-    margin-bottom: 12px;
-}
-
-.product-info p.price {
-    font-size: 24px;
-    font-weight: 600;
-    color: #4A72FF;
-    margin-bottom: 20px;
-}
-
-.product-info p.description {
-    font-size: 16px;
-    color: #555;
-    margin-bottom: 30px;
-}
-
-.btn-primary {
-    padding: 12px 28px;
-    border-radius: 30px;
-    color: white;
-    background: #4A72FF;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-    font-weight: 600;
-    width: max-content;
-}
-
-.btn-primary:hover {
-    background: #3257e6;
-}
-
-@media(max-width:768px) {
+    /* Main layout */
     .product-detail {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        gap: 40px;
+        padding: 0 20px;
+        flex-wrap: wrap;
+    }
+
+    .product-detail img {
+        width: 500px;
+        max-width: 100%;
+        border-radius: 14px;
+        box-shadow: 0px 25px 45px rgba(0, 0, 0, 0.10);
+        object-fit: cover;
+    }
+
+    .product-info {
+        flex: 1;
+        display: flex;
         flex-direction: column;
+    }
+
+    /* Text */
+    .product-info h1 {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 12px;
+    }
+
+    .product-info p.price {
+        font-size: 24px;
+        font-weight: 600;
+        color: #4A72FF;
+        margin-bottom: 20px;
+    }
+
+    .product-info p.description {
+        font-size: 16px;
+        color: #444;
+        margin-bottom: 10px;
+    }
+
+    /* Button row */
+    .button-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 20px;
         align-items: center;
     }
-    .product-info {
-        width: 100%;
+
+    /* Size panel (hidden at first) */
+    .size-panel {
+        margin-top: 16px;
+        padding: 16px 20px;
+        border-radius: 14px;
+        background: #ffffff;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+        display: none;  /* hidden by default */
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
     }
-}
+
+    .size-panel.show {
+        display: flex;
+    }
+
+    .size-panel label {
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .size-panel select {
+        padding: 8px 10px;
+        border-radius: 8px;
+        border: 1px solid #cbd5e1;
+        font-family: inherit;
+    }
+
+    /* Buttons */
+    .btn-primary {
+        padding: 12px 28px;
+        border-radius: 30px;
+        color: white;
+        background: #4A72FF;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-block;
+        transition: .3s;
+    }
+
+    .btn-primary:hover {
+        background: #3257e6;
+    }
+
+    .btn-outline {
+        padding: 12px 28px;
+        border-radius: 30px;
+        background: #fff;
+        border: 2px solid #4A72FF;
+        color: #4A72FF;
+        text-decoration: none;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-block;
+        transition: .3s;
+    }
+
+    .btn-outline:hover {
+        background: #4A72FF;
+        color: #fff;
+    }
+
+    @media(max-width:768px) {
+        .product-detail {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .product-info {
+            width: 100%;
+        }
+
+        .size-panel {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="product-detail">
-    <div class="product-image">
-        {% if product.image %}
-            <img src="{{ product.image.url }}" alt="{{ product.name }}">
-        {% else %}
-            <img src="{% static 'images/default_product.png' %}" alt="{{ product.name }}">
-        {% endif %}
-    </div>
+<div class="product-page">
+    <div class="product-detail">
+        <div class="product-image">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            {% else %}
+                <img src="{% static 'images/default_product.png' %}" alt="{{ product.name }}">
+            {% endif %}
+        </div>
 
-    <div class="product-info">
-        <h1>{{ product.name }}</h1>
-        <p class="price">₹{{ product.price }}</p>
-        <p class="description">{{ product.description }}</p>
-        <a href="#" class="btn-primary">Add to Cart</a>
+        <div class="product-info">
+            <h1>{{ product.name }}</h1>
+            <p class="price">₹{{ product.price }}</p>
+
+            <p class="description"><strong>Description:</strong> {{ product.description }}</p>
+            <p class="description"><strong>Material:</strong> {{ product.material }}</p>
+            <p class="description"><strong>Available Sizes:</strong> {{ product.sizes_available }}</p>
+
+            <!-- 1️⃣ MAIN BUTTONS -->
+            <div class="button-row">
+                <!-- This just OPENS the size panel -->
+                <button type="button" class="btn-primary" id="open-size-panel">
+                    Add to Cart
+                </button>
+
+                <!-- Wishlist goes directly -->
+                <a href="" class="btn-outline">
+                    Wishlist
+                </a>
+            </div>
+
+            <!-- 2️⃣ HIDDEN SIZE PANEL (shows when Add to Cart is clicked) -->
+            <div id="size-panel" class="size-panel">
+                <form method="post" action="">
+                    {% csrf_token %}
+
+                    <!-- {# product.get_sizes_list -> ["S", "M", "L"] if sizes_available = "S,M,L" #} -->
+                  
+                    {% if product.get_sizes_list %}
+
+                        <label for="size">Select size:</label>
+
+                        <select name="size" id="size" required>
+
+                            {% for size in product.get_sizes_list %}
+
+                                <option value="{{ size }}">{{ size }}</option>
+
+                            {% endfor %}
+
+                        </select>
+                        
+                    {% endif %}
+
+                    <!-- quantity fixed to 1 (you can change later) -->
+                    <input type="hidden" name="quantity" value="1">
+
+                    <button type="submit" class="btn-primary">
+                        Done
+                    </button>
+                </form>
+            </div>
+
+        </div>
     </div>
 </div>
+
+<!-- 3️⃣ SMALL JS TO TOGGLE PANEL -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const openBtn = document.getElementById("open-size-panel");
+        const panel = document.getElementById("size-panel");
+
+        if (openBtn && panel) {
+            openBtn.addEventListener("click", function () {
+                panel.classList.add("show");
+            });
+        }
+    });
+</script>
 {% endblock %}

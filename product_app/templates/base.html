@@ -136,7 +136,7 @@ nav ul li a:hover {
         <div class="avatar">{{ user.username|slice:":2"|upper }}</div>
         <div class="dropdown">
           <p>Hello {{ user.username }}</p>
-          <a href="#">My Profile</a>
+          <a href="{% url 'profile_show' %}">My Profile</a>
           <a href="#">Wishlist</a>
           <a href="#">Orders</a>
           <hr>

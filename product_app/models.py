@@ -26,7 +26,16 @@ class CategoryModel(models.Model):
 
 class ProductModel(models.Model):
 
-    SIZES = ['XS', 'S', 'M', 'L', 'XL']
+    SIZE_CHOICES = [
+        ("XS", "XS"),
+        ("S", "S"),
+        ("M", "M"),
+        ("L", "L"),
+        ("XL", "XL"),
+        ("XXL", "XXL"),
+        ("3XL", "3XL"),
+        ("4XL", "4XL"),
+    ]
 
     name = models.CharField(max_length=200)
 
@@ -74,6 +83,24 @@ class ProductModel(models.Model):
 
         super().save(*args, **kwargs)
 
+    def get_sizes_list(self):
+    
+            if not self.sizes_available:
+
+                return []
+            
+            return [s.strip() for s in self.sizes_available.split(",") if s.strip()]
+
+
     def __str__(self):
 
         return self.name
+    
+
+# get_sizes_list() converts that string into a Python list:
+
+# ["XS", "S", "M", "L", "XL"]
+
+# This list is what you use in the template to build the <select> options
+    
+

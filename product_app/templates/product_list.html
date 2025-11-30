@@ -1,15 +1,61 @@
 {% extends "base.html" %}
-
 {% load static %}
 
 {% block title %}All Products{% endblock %}
 
 {% block extra_css %}
 <style>
+    /* Whole page background like hero */
+    .product-page {
+        background: linear-gradient(135deg, #E7F1FF, #CBE7FF);
+        padding: 40px 0 70px;
+        min-height: calc(100vh - 70px);  /* so it looks full and clean */
+    }
+
+    /* ---------- Category filter bar ---------- */
+    .category-filter {
+        max-width: 1300px;
+        margin: 0 auto 8px;
+        padding: 0 24px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+    }
+
+    .category-filter-label {
+        font-weight: 600;
+        margin-right: 8px;
+    }
+
+    .category-pill {
+        display: inline-block;
+        padding: 6px 14px;
+        border-radius: 999px;
+        border: 1px solid #e5e7eb;
+        background: #f9fafb;
+        font-size: 13px;
+        text-decoration: none;
+        color: #374151;
+        transition: background .2s ease, color .2s ease, border-color .2s ease;
+    }
+
+    .category-pill:hover {
+        background: #eff6ff;
+        border-color: #93c5fd;
+        color: #1d4ed8;
+    }
+
+    .category-pill.active {
+        background: #1d4ed8;
+        color: #ffffff;
+        border-color: #1d4ed8;
+    }
+
     /* ---------- Section title ---------- */
     .section-title {
         text-align: center;
-        margin: 48px 0 24px;
+        margin: 24px 0 24px;
         font-size: 30px;
         font-weight: 700;
     }
@@ -21,7 +67,6 @@
 
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        /* wider cards */
         gap: 32px;
         justify-items: center;
     }
@@ -37,16 +82,13 @@
         display: flex;
         flex-direction: column;
         max-width: 340px;
-        /* increased width */
         transition: transform .25s ease, box-shadow .25s ease;
     }
 
     .product-card img {
         width: 100%;
         height: 350px;
-        /* bigger, more professional image box */
         object-fit: contain;
-        /* show full image (not cropped) */
         background: #f5f5f5;
         display: block;
     }
@@ -56,11 +98,9 @@
         box-shadow: 0 20px 40px rgba(15, 23, 42, 0.10);
     }
 
-
     .product-card .product-info {
         padding: 14px 16px 18px;
         background: #f9fafb;
-        /* soft background for text */
     }
 
     .product-card h3 {
@@ -73,7 +113,7 @@
     .product-card p {
         font-size: 14px;
         font-weight: 600;
-        color: #2563eb;
+        color: #4A72FF;
         margin: 0;
     }
 
@@ -84,44 +124,82 @@
         }
     }
 </style>
-
 {% endblock %}
 
 
 {% block content %}
+<div class="product-page">
 
+    <!-- CATEGORY FILTER BAR -->
+    <div class="category-filter">
+        <span class="category-filter-label">Filter by:</span>
 
-<!-- PRODUCT GRID -->
-<h2 class="section-title">All Products</h2>
+        <!-- All products -->
+        <a href="{% url 'product_list' %}"
+           class="category-pill {% if not selected_category %}active{% endif %}">
+            All
+        </a>
 
-<div class="product-grid">
+        <!-- Each category from context -->
 
-    {% for product in products %}
+        <!-- Each cat is an instance of CategoryModel. -->
+        {% for cat in categories %}
 
-    <a href="{% url 'product_detail' slug=product.slug %}" class="product-card">
+            <a href="{% url 'product_list' %}?category={{ cat.slug }}"
+               class="category-pill {% if selected_category == cat.slug %}active{% endif %}">
 
-        {% if product.image %}
+                {{ cat.name }}
 
-        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            </a>
 
-        {% else %}
+        {% endfor %}
+    </div>
 
-        <img src="{% static 'images/default_product.png' %}" alt="{{ product.name }}">
+    <!-- TITLE (changes based on selected category) -->
 
-        {% endif %}
+    <!-- Each cat is an instance of CategoryModel. -->
+    {% if selected_category %}  
 
-        <div class="product-info">
+        {% for cat in categories %}
 
-            <h3>{{ product.name }}</h3>
+            {% if cat.slug == selected_category %}
 
-            <p>₹{{ product.price }}</p>
-        </div>
-    </a>
-    {% empty %}
+                <h2 class="section-title">{{ cat.name }}</h2>
 
-    <p style="grid-column:1/-1;text-align:center;">No products found.</p>
-    
-    {% endfor %}
+            {% endif %}
+
+        {% endfor %}
+
+    {% else %}
+
+        <h2 class="section-title">All Products</h2>
+
+    {% endif %}
+
+    <!-- PRODUCT GRID -->
+    <div class="product-grid">
+
+        <!-- products → a list of ProductModel objects passed from the view. -->
+
+        {% for product in products %}
+        
+            <a href="{% url 'product_detail' slug=product.slug %}" class="product-card">
+
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                {% else %}
+                    <img src="{% static 'images/default_product.png' %}" alt="{{ product.name }}">
+                {% endif %}
+
+                <div class="product-info">
+                    <h3>{{ product.name }}</h3>
+                    <p>₹{{ product.price }}</p>
+                </div>
+            </a>
+        {% empty %}
+            <p style="grid-column:1/-1;text-align:center;">No products found.</p>
+        {% endfor %}
+    </div>
+
 </div>
-
 {% endblock %}

@@ -30,12 +30,19 @@ class ProductListView(ListView):
     def get_context_data(self, **kwargs):
 
         context = super().get_context_data(**kwargs)
-
-        context["categories"] = CategoryModel.objects.all()
+         
+        # get cat_name,slug
+        
+        context["categories"] = CategoryModel.objects.all() 
 
         context["selected_category"] = self.request.GET.get("category")
 
         return context
+    
+
+#      Variable	                 Purpose
+#     categories	            To show category buttons in UI
+#    selected_category	         To highlight active category and know which is selected
 
 
 class ProductDetailView(DetailView):
@@ -49,3 +56,8 @@ class ProductDetailView(DetailView):
     slug_field = "slug"
 
     slug_url_kwarg = "slug"
+
+# slug_url_kwarg = "slug" → take this value from kwargs["slug"]
+
+# slug_field = "slug" → search in the model’s slug field
+
