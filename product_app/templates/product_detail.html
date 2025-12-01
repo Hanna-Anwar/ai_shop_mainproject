@@ -183,7 +183,7 @@
 
             <!-- 2️⃣ HIDDEN SIZE PANEL (shows when Add to Cart is clicked) -->
             <div id="size-panel" class="size-panel">
-                <form method="post" action="">
+                <form method="post" action="{% url 'add_to_cart' product.id %}">
                     {% csrf_token %}
 
                     <!-- {# product.get_sizes_list -> ["S", "M", "L"] if sizes_available = "S,M,L" #} -->

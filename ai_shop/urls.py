@@ -27,6 +27,8 @@ from user_app.views import *
 
 from product_app.views import *
 
+from cart_app.views import *
+
 urlpatterns = [
     path('admin/', admin.site.urls),
 
@@ -53,6 +55,16 @@ urlpatterns = [
     path('products/', ProductListView.as_view(), name='product_list'), 
 
     path('product/<slug:slug>/', ProductDetailView.as_view(), name='product_detail'),  # Detail page
+
+    path('addtocart/<int:pk>',AddToCartView.as_view(),name="add_to_cart"),
+
+    path('cart/',CartDetailView.as_view(),name="cart_details"),
+
+    path('cart_increase/<int:pk>',CartIncreaseView.as_view(),name="cart_increase"),
+
+    path('cart_decrease/<int:pk>',CartDecreaseView.as_view(),name="cart_decrease"),
+    
+    path('remove_cart/<int:pk>',CartRemoveView.as_view(),name="cart_remove"),
 
 
 ]

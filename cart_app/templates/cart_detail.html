@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}My Cart{% endblock %}
+
+{% block extra_css %}
+<style>
+    .cart-page {
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 20px;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .cart-title {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .cart-item {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 15px 0;
+        border-bottom: 1px solid #e2e2e2;
+    }
+
+    .cart-item img {
+        width: 120px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 10px;
+        box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .item-info {
+        flex: 1;
+    }
+
+    .item-info h4 {
+        font-size: 20px;
+        margin: 0;
+    }
+
+    .item-info p {
+        margin: 2px 0;
+        color: #555;
+    }
+
+    .qty-controls {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 6px;
+    }
+
+    .qty-controls form {
+        display: inline;
+    }
+
+    .qty-btn {
+        padding: 4px 10px;
+        border-radius: 999px;
+        border: 1px solid #4A72FF;
+        background: #fff;
+        color: #4A72FF;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .qty-btn:hover {
+        background: #4A72FF;
+        color: #fff;
+    }
+
+    .remove-btn {
+        margin-top: 8px;
+        padding: 4px 12px;
+        border-radius: 999px;
+        border: 1px solid #e11d48;
+        background: #fff;
+        color: #e11d48;
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+    .remove-btn:hover {
+        background: #e11d48;
+        color: #fff;
+    }
+
+    .item-price {
+        font-size: 18px;
+        font-weight: 600;
+        color: #4A72FF;
+    }
+
+    .empty-cart {
+        font-size: 20px;
+        text-align: center;
+        padding: 40px;
+        color: #666;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="cart-page">
+    <h2 class="cart-title">My Cart</h2>
+
+    {% if items %}
+        {% for item in items %}
+            <div class="cart-item">
+
+                <!-- Product image -->
+                {% if item.product.image %}
+                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                {% else %}
+                    <img src="{% static 'images/default_product.png' %}" alt="No image">
+                {% endif %}
+
+                <!-- Product info + quantity controls -->
+                <div class="item-info">
+                    <h4>{{ item.product.name }}</h4>
+                    <p><strong>Size:</strong> {{ item.size }}</p>
+                    <p><strong>Color:</strong> {{ item.product.color }}</p>
+
+                    <div class="qty-controls">
+                        <!-- decrease -->
+                        <form method="post" action="{% url 'cart_decrease' item.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="qty-btn">−</button>
+                        </form>
+
+                        <span>{{ item.quantity }}</span>
+
+                        <!-- increase -->
+                        <form method="post" action="{% url 'cart_increase' item.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="qty-btn">+</button>
+                        </form>
+                    </div>
+
+                    <!-- remove -->
+                    <form method="post" action="{% url 'cart_remove' item.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="remove-btn">Remove</button>
+                    </form>
+                </div>
+
+                <!-- Price (per piece) -->
+                <p class="item-price">₹{{ item.product.price }}</p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="empty-cart">Your cart is empty 😊</p>
+    {% endif %}
+</div>
+{% endblock %}
