@@ -29,8 +29,13 @@ from product_app.views import *
 
 from cart_app.views import *
 
+from wishlist_app.views import *
+
 urlpatterns = [
+
     path('admin/', admin.site.urls),
+
+    #user_app/urls
 
     path('register/',UserRegisterView.as_view(),name="register"),
 
@@ -52,9 +57,13 @@ urlpatterns = [
 
     path('profileedit/',ProfileEditView.as_view(),name="profile_edit"),
 
+    #product_app/urls
+
     path('products/', ProductListView.as_view(), name='product_list'), 
 
     path('product/<slug:slug>/', ProductDetailView.as_view(), name='product_detail'),  # Detail page
+
+    #cart_app/urls
 
     path('addtocart/<int:pk>',AddToCartView.as_view(),name="add_to_cart"),
 
@@ -65,6 +74,14 @@ urlpatterns = [
     path('cart_decrease/<int:pk>',CartDecreaseView.as_view(),name="cart_decrease"),
     
     path('remove_cart/<int:pk>',CartRemoveView.as_view(),name="cart_remove"),
+
+    # wishlist_app/urls
+
+    path('addtowishlist/<int:pk>',AddToWishlistView.as_view(),name="add_wishlist"),
+
+    path('list_wishlist/',WishlistDetailView.as_view(),name="wishlist_details"),
+
+    path('remove_wishlist/<int:pk>',WishlistRemoveView.as_view(),name="wishlist_remove"),
 
 
 ]

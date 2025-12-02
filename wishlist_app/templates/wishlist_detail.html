@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}My Wishlist{% endblock %}
+
+{% block extra_css %}
+<style>
+    .wishlist-page {
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 20px;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .wishlist-title {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .wishlist-item {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 15px 0;
+        border-bottom: 1px solid #e2e2e2;
+    }
+
+    .wishlist-item img {
+        width: 120px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 10px;
+        box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .item-info {
+        flex: 1;
+    }
+
+    .item-info h4 {
+        margin: 0;
+        font-size: 20px;
+    }
+
+    .item-info p {
+        margin: 4px 0;
+        color: #555;
+    }
+
+    .btn-remove {
+        padding: 6px 14px;
+        border-radius: 999px;
+        border: 1px solid #e11d48;
+        background: #fff;
+        color: #e11d48;
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+    .btn-remove:hover {
+        background: #e11d48;
+        color: #fff;
+    }
+
+    .empty-wishlist {
+        font-size: 20px;
+        text-align: center;
+        padding: 40px;
+        color: #666;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="wishlist-page">
+    <h2 class="wishlist-title">My Wishlist</h2>
+
+    {% if items %}
+        {% for item in items %}
+            <div class="wishlist-item">
+                {% if item.product.image %}
+                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                {% else %}
+                    <img src="{% static 'images/default_product.png' %}" alt="No image">
+                {% endif %}
+
+                <div class="item-info">
+                    <h4>{{ item.product.name }}</h4>
+                    <p><strong>Color:</strong> {{ item.product.color }}</p>
+                    <p>Price: ₹{{ item.product.price }}</p>
+                </div>
+
+                <form method="post" action="{% url 'wishlist_remove' item.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-remove">Remove</button>
+                </form>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="empty-wishlist">Your wishlist is empty 💕</p>
+    {% endif %}
+</div>
+{% endblock %}

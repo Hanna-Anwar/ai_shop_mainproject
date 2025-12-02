@@ -1,6 +1,7 @@
 from django.db import models
 
 from user_app.models import CustomUserModel
+
 from product_app.models import ProductModel
 
 

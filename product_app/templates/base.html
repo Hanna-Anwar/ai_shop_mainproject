@@ -137,7 +137,7 @@ nav ul li a:hover {
         <div class="dropdown">
           <p>Hello {{ user.username }}</p>
           <a href="{% url 'profile_show' %}">My Profile</a>
-          <a href="#">Wishlist</a>
+          <a href="{% url 'wishlist_details' %}">Wishlist</a>
           <a href="#">Orders</a>
           <hr>
           <a href="{% url 'logout' %}">Logout</a>
