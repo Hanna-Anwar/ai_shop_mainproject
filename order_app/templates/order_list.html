@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+
+{% block title %}My Orders{% endblock %}
+
+{% block extra_css %}
+<style>
+
+  body{
+
+      background: linear-gradient(135deg, #E7F1FF, #CBE7FF);
+
+  }
+  .orders-page {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 16px;
+      font-family: 'Poppins', sans-serif;
+  }
+
+  .orders-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 24px;
+  }
+
+  .orders-title {
+      font-size: 28px;
+      font-weight: 700;
+      margin: 0;
+  }
+
+  .orders-subtitle {
+      font-size: 14px;
+      color: #6b7280;
+  }
+
+  .orders-empty {
+      text-align: center;
+      padding: 40px 20px;
+      border-radius: 16px;
+      background: #f9fafb;
+      color: #6b7280;
+      font-size: 15px;
+  }
+
+  .orders-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+  }
+
+  .order-card {
+      display: block;
+      text-decoration: none;
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 16px 20px;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      border: 1px solid #e5e7eb;
+      color: inherit;
+  }
+
+  .order-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.10);
+  }
+
+  .order-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+  }
+
+  .order-id {
+      font-weight: 600;
+      font-size: 16px;
+  }
+
+  .order-status {
+      font-size: 13px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #eef2ff;
+      color: #4338ca;
+      font-weight: 500;
+  }
+
+  .order-meta {
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 4px;
+  }
+
+  .order-total {
+      font-size: 14px;
+      font-weight: 600;
+      color: #111827;
+  }
+
+  @media (max-width: 640px) {
+      .orders-page {
+          margin-top: 24px;
+      }
+
+      .order-top-row {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 4px;
+      }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="orders-page">
+  <div class="orders-header">
+      <h1 class="orders-title">My Orders</h1>
+      <span class="orders-subtitle">Track all your past purchases in one place</span>
+  </div>
+
+  {% if orders %}
+    <ul class="orders-list">
+      {% for order in orders %}
+        <li>
+          <a href="" class="order-card">
+            <div class="order-top-row">
+              <span class="order-id">Order #{{ order.id }}</span>
+              <span class="order-status">{{ order.get_status_display }}</span>
+            </div>
+
+            <div class="order-meta">
+              Placed on {{ order.created_at|date:"d M Y · H:i" }}
+            </div>
+
+            <div class="order-total">
+              Total: ₹{{ order.total_price }}
+            </div>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="orders-empty">
+      <p>You have no orders yet.</p>
+      <p>Start shopping and your orders will appear here ✨</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

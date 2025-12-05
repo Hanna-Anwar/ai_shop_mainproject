@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+
+{% block title %}Order #{{ order.id }}{% endblock %}
+
+{% block extra_css %}
+<style>
+
+  body{
+         background: linear-gradient(135deg, #E7F1FF, #CBE7FF);
+
+  }
+  
+  .order-page {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 24px 60px;
+  }
+
+  .order-card {
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+      padding: 24px 28px;
+      margin-bottom: 24px;
+  }
+
+  .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      gap: 12px;
+  }
+
+  .order-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0;
+  }
+
+  .order-badge {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      background: #eef2ff;
+      color: #4338ca;
+      white-space: nowrap;
+  }
+
+  .order-meta {
+      font-size: 14px;
+      color: #6b7280;
+      margin-bottom: 4px;
+  }
+
+  .order-total {
+      font-size: 16px;
+      font-weight: 600;
+      margin-top: 8px;
+  }
+
+  .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 18px 0 10px;
+  }
+
+  .shipping-block p {
+      margin: 0;
+      font-size: 14px;
+      color: #374151;
+  }
+
+  .items-card {
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+      padding: 20px 24px;
+      margin-bottom: 24px;
+  }
+
+  .items-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+  }
+
+  .items-table thead {
+      background: #f9fafb;
+  }
+
+  .items-table th,
+  .items-table td {
+      padding: 10px 8px;
+      text-align: left;
+  }
+
+  .items-table th {
+      font-weight: 600;
+      color: #4b5563;
+      border-bottom: 1px solid #e5e7eb;
+  }
+
+  .items-table tbody tr + tr td {
+      border-top: 1px solid #f3f4f6;
+  }
+
+  .item-name {
+      font-weight: 500;
+      color: #111827;
+  }
+
+  .item-meta {
+      font-size: 12px;
+      color: #6b7280;
+  }
+
+  .order-back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+      color: #111827;
+      transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+  }
+
+  .order-back-link:hover {
+      background: #f9fafb;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+      transform: translateY(-1px);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="order-page">
+
+  <div class="order-card">
+    <div class="order-header">
+      <h1 class="order-title">Order #{{ order.id }}</h1>
+      <span class="order-badge">{{ order.get_status_display }}</span>
+    </div>
+
+    <p class="order-meta">
+      <strong>Date:</strong> {{ order.created_at|date:"d M Y, H:i" }}
+    </p>
+    <p class="order-total">
+      <strong>Total:</strong> ₹{{ order.total_price }}
+    </p>
+
+    <h2 class="section-title">Shipping Details</h2>
+    <div class="shipping-block">
+      <p>{{ order.full_name }}</p>
+      <p>{{ order.address_line1 }}</p>
+      {% if order.address_line2 %}
+        <p>{{ order.address_line2 }}</p>
+      {% endif %}
+      <p>{{ order.city }} {{ order.postal_code }}</p>
+      <p>Phone: {{ order.phone }}</p>
+    </div>
+  </div>
+
+  <div class="items-card">
+    <h2 class="section-title">Items</h2>
+
+    <table class="items-table">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Size</th>
+          <th>Qty</th>
+          <th>Subtotal</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in order.items.all %}
+          <tr>
+            <td>
+              <div class="item-name">{{ item.product.name }}</div>
+              <div class="item-meta">₹{{ item.price }} each</div>
+            </td>
+            <td>
+              {% if item.size %}
+                {{ item.size }}
+              {% else %}
+                —
+              {% endif %}
+            </td>
+            <td>{{ item.quantity }}</td>
+            <td>₹{{ item.subtotal }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <a href="{% url 'order_list' %}" class="order-back-link">
+    ← Back to my orders
+  </a>
+
+</div>
+{% endblock %}

@@ -1,83 +1,74 @@
 from django.db import models
-
-# from user_app.models import CustomUserModel
-
-# from product_app.models import ProductModel
+from user_app.models import CustomUserModel
+from product_app.models import ProductModel
 
 
-# class Order(models.Model):
+class Order(models.Model):
 
-#     STATUS_CHOICES = [
-#         ("PENDING", "Pending"),
-#         ("PAID", "Paid"),
-#         ("CANCELLED", "Cancelled"),
-#     ]
+    STATUS_CHOICES = [
+        ("PENDING", "Pending"),
+        ("PAID", "Paid"),
+        ("CANCELLED", "Cancelled"),
+    ]
 
+    user = models.ForeignKey(
+        CustomUserModel,
+        on_delete=models.CASCADE,
+        related_name="orders"
+    )
 
-#     user = models.ForeignKey(CustomUserModel, on_delete=models.CASCADE)
+    # Basic shipping / contact info (from checkout form)
+    full_name = models.CharField(max_length=100)
 
-#     created_at = models.DateTimeField(auto_now_add=True)
+    phone = models.CharField(max_length=15)
+
+    address_line1 = models.CharField(max_length=255)
+
+    address_line2 = models.CharField(max_length=255, blank=True, null=True)
+
+    city = models.CharField(max_length=100, blank=True, null=True)
+
+    postal_code = models.CharField(max_length=20, blank=True, null=True)
+
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
     
-#     full_name = models.CharField(max_length=100)
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="PENDING",
+    )
 
-#     address = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
-#     city = models.CharField(max_length=100)
+    def __str__(self):
+        return f"Order #{self.id} - {self.user.username}"
 
-#     state = models.CharField(max_length=100)
+    @property
+    def item_count(self):
 
-#     pincode = models.CharField(max_length=20)
-
-#     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="PENDING")
-    
-#     def __str__(self):
-
-#         return f"Order #{self.id} - {self.user.username}"
+        return sum(item.quantity for item in self.items.all())
 
 
-# class OrderItemModel(models.Model):
+class OrderItemModel(models.Model):
 
-#     order = models.ForeignKey(Order, related_name="items", on_delete=models.CASCADE)
+    order = models.ForeignKey(
+        Order,
+        related_name="items",
+        on_delete=models.CASCADE,
+    )
+    product = models.ForeignKey(ProductModel, on_delete=models.CASCADE)
 
-#     product = models.ForeignKey(ProductModel, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
 
-#     size = models.CharField(max_length=10, blank=True, null=True)
+    size = models.CharField(max_length=10, blank=True, null=True)
 
-#     quantity = models.PositiveIntegerField(default=1)
+    price = models.DecimalField(max_digits=10, decimal_places=2)  # price at time of order
 
-#     price = models.DecimalField(max_digits=10, decimal_places=2)  # copy at time of order
+    def __str__(self):
 
-#     def __str__(self):
+        return f"{self.product.name} x {self.quantity}"
 
-#         return f"{self.product.name} x {self.quantity}"
-    
-# class PaymentModel(models.Model):
+    @property
+    def subtotal(self):
 
-#     PAYMENT_METHOD_CHOICES = [
-#                         ("COD", "Cash on Delivery"),
-#                         ("ONLINE", "Online Payment"),
-#     ]
-
-#     PAYMENT_STATUS_CHOICES = [
-#                         ("PENDING", "Pending"),
-#                         ("SUCCESS", "Success"),
-#                         ("FAILED", "Failed"),
-#     ]
-
-#     order = models.ForeignKey(Order, related_name="payments", on_delete=models.CASCADE)
-
-#     amount = models.DecimalField(max_digits=10, decimal_places=2)
-
-#     method = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES)
-
-#     status = models.CharField(max_length=20, choices=PAYMENT_STATUS_CHOICES, default="PENDING")
-
-#     transaction_id = models.CharField(max_length=100, blank=True, null=True)  # for gateway ref
-
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-#     def __str__(self):
-
-#         return f"Payment for Order #{self.order.id} - {self.status}"
-
-#not done migrations or any thing
+        return self.quantity * self.price

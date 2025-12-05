@@ -113,24 +113,6 @@
         background: #3257e6;
     }
 
-    .btn-outline {
-        padding: 12px 28px;
-        border-radius: 30px;
-        background: #fff;
-        border: 2px solid #4A72FF;
-        color: #4A72FF;
-        text-decoration: none;
-        font-weight: 600;
-        cursor: pointer;
-        display: inline-block;
-        transition: .3s;
-    }
-
-    .btn-outline:hover {
-        background: #4A72FF;
-        color: #fff;
-    }
-
     @media(max-width:768px) {
         .product-detail {
             flex-direction: column;
@@ -177,7 +159,7 @@
 
                 <!-- Wishlist goes directly -->
     
-                <a href="{% url 'add_wishlist' product.id %}" class="btn-outline">
+                <a href="{% url 'add_wishlist' product.id %}" class="btn-primary">
                     Wishlist
                 </a>
             </div>

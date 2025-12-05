@@ -61,9 +61,14 @@ class CartDetailView(LoginRequiredMixin, View):
 
         cart = get_user_cart(request.user)
 
-        items = cart.items.all()
+        items = cart.items.select_related("product").all()
 
-        return render(request, "cart_detail.html", {"cart": cart, "items": items})
+        # calculate total
+        cart_total = sum(item.subtotal for item in items)
+
+        total_items = sum(item.quantity for item in items)
+
+        return render(request, "cart_detail.html", {"cart": cart, "items": items,"cart_total":cart_total,"total_item":total_items})
     
 class CartIncreaseView(LoginRequiredMixin, View):
     """

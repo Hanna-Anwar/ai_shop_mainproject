@@ -31,6 +31,8 @@ from cart_app.views import *
 
 from wishlist_app.views import *
 
+from order_app.views import *
+
 urlpatterns = [
 
     path('admin/', admin.site.urls),
@@ -83,8 +85,14 @@ urlpatterns = [
 
     path('remove_wishlist/<int:pk>',WishlistRemoveView.as_view(),name="wishlist_remove"),
 
+    #order_app/urls
 
-]
+    path("checkout/", CheckoutView.as_view(), name="checkout"),
+
+    path("orderlist/", OrderListView.as_view(), name="order_list"),
+    
+    path("orderdetail/<int:pk>", OrderDetailView.as_view(), name="order_detail"),
+ ]
 
 
 if settings.DEBUG:

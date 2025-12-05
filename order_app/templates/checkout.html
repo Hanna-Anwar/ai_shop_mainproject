@@ -1,0 +1,274 @@
+{% extends 'base.html' %}
+
+{% block title %}Checkout – Glamio{% endblock %}
+
+{% block extra_css %}
+<style>
+
+  body{
+     background: linear-gradient(135deg, #E7F1FF, #CBE7FF);
+  }
+  .checkout-page {
+    max-width: 1100px;
+    margin: 40px auto 60px;
+    padding: 0 20px;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .checkout-heading {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .checkout-subtitle {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 24px;
+  }
+
+  .checkout-grid {
+    display: grid;
+    grid-template-columns: 2fr 1.4fr;
+    gap: 24px;
+  }
+
+  /* CARD */
+  .card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 20px 22px;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+  }
+
+  .card h2 {
+    margin: 0 0 12px;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .divider {
+    height: 1px;
+    background: #e5e7eb;
+    margin: 14px 0;
+  }
+
+  /* ORDER SUMMARY LIST */
+  .order-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 10px 0;
+  }
+
+  .order-item-left {
+    max-width: 75%;
+  }
+
+  .order-item-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #111827;
+    margin-bottom: 4px;
+  }
+
+  .order-item-meta {
+    font-size: 12px;
+    color: #6b7280;
+  }
+
+  .order-item-price {
+    font-size: 14px;
+    font-weight: 600;
+    color: #111827;
+  }
+
+  .order-total-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+    margin-top: 10px;
+    font-weight: 600;
+  }
+
+  .order-total-row span:last-child {
+    color: #111827;
+  }
+
+  /* FORM */
+  .checkout-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 8px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .form-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #374151;
+  }
+
+  .form-input {
+    border-radius: 12px;
+    border: 1px solid #d1d5db;
+    padding: 9px 10px;
+    font-size: 14px;
+    outline: none;
+    transition: border 0.2s, box-shadow 0.2s;
+  }
+
+  .form-input:focus {
+    border-color: #4A72FF;
+    box-shadow: 0 0 0 1px rgba(74, 114, 255, 0.15);
+  }
+
+  .checkout-btn {
+    margin-top: 10px;
+    width: 100%;
+    padding: 11px 16px;
+    border-radius: 999px;
+    border: none;
+    background: #4A72FF;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+
+  .checkout-btn:hover {
+    background: #3257e6;
+    transform: translateY(-1px);
+  }
+
+  .checkout-btn:active {
+    transform: translateY(0);
+  }
+
+  .empty-cart-msg {
+    text-align: center;
+    font-size: 14px;
+    color: #6b7280;
+    margin-top: 40px;
+  }
+
+  .required{
+
+    color: red;
+    font: bold;
+  }
+
+  @media (max-width: 900px) {
+    .checkout-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="checkout-page">
+  <h1 class="checkout-heading">Checkout</h1>
+  <p class="checkout-subtitle">
+    Review your items and enter your shipping details to complete the order.
+  </p>
+
+  {% if cart_items %}
+  <div class="checkout-grid">
+    <!-- LEFT: SHIPPING FORM -->
+    <div class="card">
+      <h2>Shipping details</h2>
+      <div class="divider"></div>
+
+      <form method="post" class="checkout-form">
+        {% csrf_token %}
+        <div class="form-group">
+          <label class="form-label">Full name<span class="required">*</span></label>
+          <input type="text" name="full_name" class="form-input" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Phone number<span class="required">*</span></label>
+          <input type="text" name="phone" class="form-input" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Address line 1<span class="required">*</span></label>
+          <input type="text" name="address_line1" class="form-input" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Address line 2 (optional)</label>
+          <input type="text" name="address_line2" class="form-input">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">City<span class="required">*</span></label>
+          <input type="text" name="city" class="form-input">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Postal code<span class="required">*</span></label>
+          <input type="text" name="postal_code" class="form-input">
+        </div>
+
+        <button type="submit" class="checkout-btn">
+          Place order
+        </button>
+      </form>
+    </div>
+
+    <!-- RIGHT: ORDER SUMMARY -->
+    <div class="card">
+      <h2>Order summary</h2>
+      <div class="divider"></div>
+
+      <ul class="order-items">
+        {% for item in cart_items %}
+        <li class="order-item">
+          <div class="order-item-left">
+            <div class="order-item-name">
+              {{ item.product.name }}
+            </div>
+            <div class="order-item-meta">
+              Qty: {{ item.quantity }}
+              {% if item.size %}
+                • Size: {{ item.size }}
+              {% endif %}
+            </div>
+          </div>
+          <div class="order-item-price">
+            ₹{{ item.subtotal }}
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+
+      <div class="divider"></div>
+
+      <div class="order-total-row">
+        <span>Total</span>
+        <span>₹{{ cart.total_price }}</span>
+      </div>
+    </div>
+  </div>
+  {% else %}
+    <p class="empty-cart-msg">
+      Your cart is empty. <a href="{% url 'product_list' %}">Continue shopping →</a>
+    </p>
+  {% endif %}
+</div>
+{% endblock %}
