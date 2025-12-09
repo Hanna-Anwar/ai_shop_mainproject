@@ -202,7 +202,7 @@ class UserProfileView(CreateView):
 
         return super().form_valid(form)
     
-    def dispatch(self, request, *args, **kwargs):
+    def dispatch(self, request,**kwargs):
         
         # Prevent creating multiple profiles
 
@@ -210,7 +210,7 @@ class UserProfileView(CreateView):
 
             return redirect("profile_edit") 
          
-        return super().dispatch(request, *args, **kwargs)
+        return super().dispatch(request, **kwargs)
 
 #detail view 
 class ProfileShowView(DetailView):

@@ -56,6 +56,15 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'ai_shop.urls'
 
+from dotenv import load_dotenv
+load_dotenv()
+import os
+
+RAZORPAY_KEY_ID = os.getenv('RAZORPAY_KEY_ID')
+
+RAZORPAY_KEY_SECRET = os.getenv('RAZORPAY_KEY_SECRET')
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

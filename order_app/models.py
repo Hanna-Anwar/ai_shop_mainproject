@@ -72,3 +72,34 @@ class OrderItemModel(models.Model):
     def subtotal(self):
 
         return self.quantity * self.price
+
+class Payment(models.Model):
+
+    user = models.ForeignKey(
+        CustomUserModel,
+        on_delete=models.CASCADE,
+        related_name="payments",
+    )
+
+    order = models.OneToOneField(
+        "Order",
+        on_delete=models.CASCADE,
+        related_name="payment",
+    )
+
+    amount = models.IntegerField()  
+
+    razorpay_order_id = models.CharField(max_length=200, blank=True, null=True) #stores the Razorpay Order ID
+
+    razorpay_payment_id = models.CharField(max_length=200, blank=True, null=True)#After a successful payment, Razorpay returns a Payment ID,
+
+    razorpay_signature = models.CharField(max_length=200, blank=True, null=True)
+
+    is_paid = models.BooleanField(default=False)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+
+        return f"Payment for Order #{self.order.id} - {'PAID' if self.is_paid else 'PENDING'}"
+

@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}Payment – Order #{{ order.id }}{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 40px auto; padding: 24px; background:#fff;
+            border-radius:16px; box-shadow:0 10px 30px rgba(15,23,42,0.08);">
+
+  <h1 style="margin-top:0; font-size:22px; font-weight:700;">
+    Pay for Order #{{ order.id }}
+  </h1>
+
+  <p style="font-size:14px; color:#4b5563;">
+    Please complete the payment to confirm your order.
+  </p>
+
+  <p style="margin-top:12px; font-size:16px;">
+    <strong>Amount to pay:</strong>
+    ₹{{ order.total_price }}
+  </p>
+
+  <button id="rzp-button1"
+          style="margin-top:20px; padding:10px 20px; border:none; border-radius:999px;
+                 background:#111827; color:#ffffff; font-weight:600; cursor:pointer;
+                 box-shadow:0 8px 18px rgba(15,23,42,0.18);">
+    Pay with Razorpay
+  </button>
+
+  <!-- This form will be auto-submitted after successful payment -->
+  <form id="payment-success-form"  method="post" action="{% url 'payment_success' %}" style="display:none;">
+
+    {% csrf_token %}
+    <input type="hidden" name="razorpay_payment_id">
+    <input type="hidden" name="razorpay_order_id">
+    <input type="hidden" name="razorpay_signature">
+    <!-- our own Payment row id -->
+    <input type="hidden" name="payment_db_id" value="{{ payment.id }}">
+  </form>
+
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  var options = {
+      "key": "{{ key_id }}",                // Razorpay key id (public)
+      "amount": "{{ amount }}",             // amount in paise
+      "currency": "INR",
+      "name": "Glamio",
+      "description": "Order #{{ order.id }}",
+      "order_id": "{{ payment.razorpay_order_id }}",  // from Payment model
+      "handler": function (response){
+          // fill the hidden form and submit to Django
+          var form = document.getElementById('payment-success-form');
+          form.razorpay_payment_id.value = response.razorpay_payment_id;
+          form.razorpay_order_id.value = response.razorpay_order_id;
+          form.razorpay_signature.value = response.razorpay_signature;
+          form.submit();
+      },
+      "theme": {
+          "color": "#111827"
+      }
+  };
+
+  var rzp1 = new Razorpay(options);
+
+  document.getElementById('rzp-button1').onclick = function(e){
+      rzp1.open();
+      e.preventDefault();
+  }
+</script>
+
+{% endblock %}

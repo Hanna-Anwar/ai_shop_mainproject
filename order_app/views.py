@@ -9,7 +9,12 @@ from cart_app.utils import get_user_cart
 
 from cart_app.models import CartItem
 
-from .models import Order, OrderItemModel
+from .models import Order, OrderItemModel,Payment
+
+from django.conf import settings
+
+
+import razorpay
 
 
 class CheckoutView(LoginRequiredMixin, View):
@@ -123,4 +128,109 @@ class OrderDetailView(LoginRequiredMixin, View):
 
         return render(request, "order_details.html", context)
 
+class OrderPaymentView(LoginRequiredMixin, View):
 
+    template_name = "payment.html"  
+
+    def get(self, request, **kwargs):
+
+        pk = kwargs.get('pk')
+       
+        order = get_object_or_404(Order, id=pk, user=request.user)
+
+        amount = int(order.total_price * 100)
+
+        # 3) Create Razorpay order This creates a Razorpay client using your API keys.It’s like logging in to Razorpay from your backend.
+
+        client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+
+
+        # You tell Razorpay: “Please create an order for 99900 paise in INR”  payment_capture = 1 → auto capture the payment.
+
+        # Razorpay returns something like:
+
+        # {
+        # #   "id": "order_ABC123",
+        # #   "amount": 99900,
+        # #   ...
+        # # }That whole dict is stored in razorpay_order.
+
+
+        razorpay_order = client.order.create({
+            "amount": amount,
+            "currency": "INR",
+            "payment_capture": 1,
+        })
+
+
+        # Razorpay’s unique order ID.
+
+        rp_order_id = razorpay_order["id"]
+
+        # Django checks if there’s already a Payment row for this order.
+        # 1)First time Anjali is paying for this order
+        # 2)She tried before, but payment failed / refreshed page
+        
+        payment, created = Payment.objects.get_or_create(
+            order=order,
+            defaults={
+                "user": request.user,
+                "amount": amount,
+                "razorpay_order_id": rp_order_id,
+            },
+        )
+        if not created:
+            payment.amount = amount
+
+            payment.razorpay_order_id = rp_order_id
+
+            payment.is_paid = False
+
+            payment.save()
+
+        # 5) Render Razorpay payment page
+        context = {
+            "order": order,
+            "payment": payment,
+            "amount": amount,
+            "key_id": settings.RAZORPAY_KEY_ID,   # your public key
+        }
+        return render(request, "payment.html", context)
+
+
+class PaymentSuccessView(View):
+   
+    def post(self, request):
+
+        rp_payment_id = request.POST.get("razorpay_payment_id")
+
+        rp_order_id   = request.POST.get("razorpay_order_id")
+
+        rp_signature  = request.POST.get("razorpay_signature")
+
+        payment_db_id = request.POST.get("payment_db_id")   # hidden field in template
+
+        # our Payment row
+        payment = get_object_or_404(
+            Payment,
+            id=payment_db_id,
+            razorpay_order_id=rp_order_id,
+        )
+        order = payment.order
+
+        # store Razorpay details
+        payment.razorpay_payment_id = rp_payment_id
+
+        payment.razorpay_signature  = rp_signature
+
+        payment.is_paid = True
+
+        payment.save()
+
+        #  update order status
+        order.status = "PAID"
+
+        order.save()
+
+        # go to order details page
+        return redirect("order_detail", pk=order.id)

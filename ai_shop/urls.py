@@ -84,7 +84,6 @@ urlpatterns = [
     path('list_wishlist/',WishlistDetailView.as_view(),name="wishlist_details"),
 
     path('remove_wishlist/<int:pk>',WishlistRemoveView.as_view(),name="wishlist_remove"),
-
     #order_app/urls
 
     path("checkout/", CheckoutView.as_view(), name="checkout"),
@@ -92,10 +91,10 @@ urlpatterns = [
     path("orderlist/", OrderListView.as_view(), name="order_list"),
     
     path("orderdetail/<int:pk>", OrderDetailView.as_view(), name="order_detail"),
- ]
 
+    path('payment/<int:pk>',OrderPaymentView.as_view(),name="order_payment"),
 
-if settings.DEBUG:
-    
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('payment_success',PaymentSuccessView.as_view(),name="payment_success")
+
+ ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
