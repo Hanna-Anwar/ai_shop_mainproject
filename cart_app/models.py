@@ -28,7 +28,10 @@ class CartItem(models.Model):
 
     size = models.CharField(max_length=10, blank=True, null=True)
 
-   
+    top_size = models.CharField(max_length=10, blank=True, null=True)
+    
+    bottom_size = models.CharField(max_length=10, blank=True, null=True)
+
     @property
     def subtotal(self):
         

@@ -148,7 +148,14 @@
 
             <p class="description"><strong>Description:</strong> {{ product.description }}</p>
             <p class="description"><strong>Material:</strong> {{ product.material }}</p>
-            <p class="description"><strong>Available Sizes:</strong> {{ product.sizes_available }}</p>
+
+            {# ✅ SIZE DISPLAY SECTION #}
+            {% if product.is_set %}
+                <p class="description"><strong>Top Sizes:</strong> {{ product.top_sizes_available }}</p>
+                <p class="description"><strong>Bottom Sizes:</strong> {{ product.bottom_sizes_available }}</p>
+            {% else %}
+                <p class="description"><strong>Available Sizes:</strong> {{ product.sizes_available }}</p>
+            {% endif %}
 
             <!-- 1️⃣ MAIN BUTTONS -->
             <div class="button-row">
@@ -158,7 +165,6 @@
                 </button>
 
                 <!-- Wishlist goes directly -->
-    
                 <a href="{% url 'add_wishlist' product.id %}" class="btn-primary">
                     Wishlist
                 </a>
@@ -166,25 +172,43 @@
 
             <!-- 2️⃣ HIDDEN SIZE PANEL (shows when Add to Cart is clicked) -->
             <div id="size-panel" class="size-panel">
+
                 <form method="post" action="{% url 'add_to_cart' product.id %}">
                     {% csrf_token %}
 
-                    <!-- {# product.get_sizes_list -> ["S", "M", "L"] if sizes_available = "S,M,L" #} -->
-                  
-                    {% if product.get_sizes_list %}
+                    {# ✅ If product is a SET, show 2 dropdowns #}
+                    {% if product.is_set %}
 
-                        <label for="size">Select size:</label>
+                        {% if product.get_top_sizes_list %}
+                            <label for="top_size">Top Size:</label>
+                            <select name="top_size" id="top_size" required>
+                                {% for size in product.get_top_sizes_list %}
+                                    <option value="{{ size }}">{{ size }}</option>
+                                {% endfor %}
+                            </select>
+                        {% endif %}
 
-                        <select name="size" id="size" required>
+                        {% if product.get_bottom_sizes_list %}
+                            <label for="bottom_size">Bottom Size:</label>
+                            <select name="bottom_size" id="bottom_size" required>
+                                {% for size in product.get_bottom_sizes_list %}
+                                    <option value="{{ size }}">{{ size }}</option>
+                                {% endfor %}
+                            </select>
+                        {% endif %}
 
-                            {% for size in product.get_sizes_list %}
+                    {# ✅ Normal product: one size dropdown #}
+                    {% else %}
 
-                                <option value="{{ size }}">{{ size }}</option>
+                        {% if product.get_sizes_list %}
+                            <label for="size">Select size:</label>
+                            <select name="size" id="size" required>
+                                {% for size in product.get_sizes_list %}
+                                    <option value="{{ size }}">{{ size }}</option>
+                                {% endfor %}
+                            </select>
+                        {% endif %}
 
-                            {% endfor %}
-
-                        </select>
-                        
                     {% endif %}
 
                     <!-- quantity fixed to 1 (you can change later) -->

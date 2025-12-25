@@ -33,27 +33,48 @@ class AddToCartView(LoginRequiredMixin, View):
 
         cart = get_user_cart(request.user)
 
-        size = request.POST.get("size", "")
-
         quantity = int(request.POST.get("quantity", 1))
 
-        cart_item, created = CartItem.objects.get_or_create(
-                                                            cart=cart,
-                                                            product=product,
-                                                            size=size if size else None,
-        )
+        size = request.POST.get("size", "")
+        
+        top_size = request.POST.get("top_size")
 
-        if not created:
+        bottom_size = request.POST.get("bottom_size")
 
-            cart_item.quantity += quantity
+        if product.is_set:
 
+            cart_item, created = CartItem.objects.get_or_create(
+                cart=cart,
+                product=product,
+                top_size=top_size if top_size else None,
+                bottom_size=bottom_size if bottom_size else None,
+                defaults={"quantity": quantity},
+            )
+
+            if not created:
+
+                cart_item.quantity += quantity
+
+                cart_item.save()
+
+        # ✅ Normal product -> use single size
         else:
 
-            cart_item.quantity = quantity
+            cart_item, created = CartItem.objects.get_or_create(
+                cart=cart,
+                product=product,
+                size=size if size else None,
+                defaults={"quantity": quantity},
+            )
 
-        cart_item.save()
+            if not created:
+
+                cart_item.quantity += quantity
+                
+                cart_item.save()
 
         return redirect("cart_details")
+
     
 class CartDetailView(LoginRequiredMixin, View): 
 

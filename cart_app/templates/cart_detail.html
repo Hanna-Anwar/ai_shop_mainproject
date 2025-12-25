@@ -270,7 +270,15 @@
 
                         <div class="item-info">
                             <h4>{{ item.product.name }}</h4>
-                            <p><strong>Size:</strong> {{ item.size }}</p>
+
+                            {# ✅ UPDATED SIZE DISPLAY #}
+                            {% if item.product.is_set %}
+                                <p><strong>Top Size:</strong> {{ item.top_size }}</p>
+                                <p><strong>Bottom Size:</strong> {{ item.bottom_size }}</p>
+                            {% else %}
+                                <p><strong>Size:</strong> {{ item.size }}</p>
+                            {% endif %}
+
                             <p><strong>Color:</strong> {{ item.product.color }}</p>
 
                             <div class="qty-controls">
@@ -298,7 +306,7 @@
                     {% endfor %}
                 </div>
 
-                <!-- RIGHT: SUMMARY (your requested block) -->
+                <!-- RIGHT: SUMMARY -->
                 <div class="cart-summary">
                     <h2>Order Summary</h2>
 
