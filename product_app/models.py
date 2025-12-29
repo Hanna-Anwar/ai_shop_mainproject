@@ -111,33 +111,27 @@ class ProductModel(models.Model):
     
     # ✅ Helpers: Convert comma string to list
     def get_sizes_list(self):
-        """
-        For normal products:
-        sizes_available = "XS,S,M,L"
-        returns -> ["XS", "S", "M", "L"]
-        """
+        
         if not self.sizes_available:
+
             return []
+        
         return [s.strip() for s in self.sizes_available.split(",") if s.strip()]
 
     def get_top_sizes_list(self):
-        """
-        For set products:
-        top_sizes_available = "S,M,L"
-        returns -> ["S","M","L"]
-        """
+       
         if not self.top_sizes_available:
+
             return []
+        
         return [s.strip() for s in self.top_sizes_available.split(",") if s.strip()]
 
     def get_bottom_sizes_list(self):
-        """
-        For set products:
-        bottom_sizes_available = "26,28,30,32"
-        returns -> ["26","28","30","32"]
-        """
+       
         if not self.bottom_sizes_available:
+
             return []
+        
         return [s.strip() for s in self.bottom_sizes_available.split(",") if s.strip()]
 
 

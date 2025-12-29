@@ -43,11 +43,11 @@ urlpatterns = [
 
     path('',HomeView.as_view(),name="home"),
 
-     path('login/',LoginView.as_view(),name="login"),
+    path('login/',LoginView.as_view(),name="login"),
 
-     path('logout/',LogoutView.as_view(),name="logout"),
+    path('logout/',LogoutView.as_view(),name="logout"),
 
-     path('forgetmail/',ForgetEmailView.as_view(),name="forget"),
+    path('forgetmail/',ForgetEmailView.as_view(),name="forget"),
 
     path('otpverify/',OtpVerifyView.as_view(),name="otp"),
 
@@ -84,6 +84,7 @@ urlpatterns = [
     path('list_wishlist/',WishlistDetailView.as_view(),name="wishlist_details"),
 
     path('remove_wishlist/<int:pk>',WishlistRemoveView.as_view(),name="wishlist_remove"),
+
     #order_app/urls
 
     path("checkout/", CheckoutView.as_view(), name="checkout"),
@@ -94,7 +95,10 @@ urlpatterns = [
 
     path('payment/<int:pk>',OrderPaymentView.as_view(),name="order_payment"),
 
-    path('payment_success',PaymentSuccessView.as_view(),name="payment_success")
+    path('payment_success',PaymentSuccessView.as_view(),name="payment_success"),
 
+    # chatbot urls
+
+    path('chat/ask',)
  ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
