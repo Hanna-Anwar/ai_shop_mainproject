@@ -73,7 +73,7 @@
       background: #3257e6;
     }
 
-    /* RIGHT SIDE OF NAVBAR (cart + profile/login) */
+    /* RIGHT SIDE OF NAVBAR */
     .nav-right {
       display: flex;
       align-items: center;
@@ -168,6 +168,149 @@
         gap: 15px;
       }
     }
+
+    /* ================= CHATBOT ================= */
+    #chatbot {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 340px;
+      font-family: 'Poppins', sans-serif;
+      z-index: 9999;
+    }
+
+    #chatbot .toggle {
+      background: #4A72FF;
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      padding: 12px 16px;
+      cursor: pointer;
+      font-weight: 600;
+      box-shadow: 0 10px 20px rgba(74, 114, 255, 0.25);
+    }
+
+    #chatbot .box {
+      display: none;
+      margin-top: 12px;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    #chatbot .header {
+      padding: 12px 14px;
+      background: #4A72FF;
+      color: #fff;
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    #chatbot .messages {
+      height: 320px;
+      overflow-y: auto;
+      padding: 12px;
+      background: #fafafa;
+    }
+
+    #chatbot .msg {
+      margin: 8px 0;
+    }
+
+    #chatbot .user {
+      text-align: right;
+    }
+
+    #chatbot .bubble {
+      display: inline-block;
+      padding: 9px 12px;
+      border-radius: 14px;
+      max-width: 85%;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    #chatbot .user .bubble {
+      background: #4A72FF;
+      color: #fff;
+    }
+
+    #chatbot .bot .bubble {
+      background: #eceffb;
+      color: #222;
+    }
+
+    #chatbot .input {
+      display: flex;
+      gap: 8px;
+      padding: 10px;
+      border-top: 1px solid #eee;
+      background: #fff;
+    }
+
+    #chatbot input {
+      flex: 1;
+      padding: 10px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      outline: none;
+      font-size: 14px;
+    }
+
+    #chatbot button.send {
+      padding: 10px 14px;
+      border: none;
+      border-radius: 12px;
+      background: #4A72FF;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .p-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 10px;
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+      background: #fff;
+    }
+
+    .p-card img {
+      width: 65px;
+      height: 65px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid #eee;
+    }
+
+    .p-card a {
+      text-decoration: none;
+      color: #111;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .p-price {
+      font-size: 13px;
+      color: #4A72FF;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .tip-list {
+      margin: 8px 0 0 18px;
+      padding: 0;
+      font-size: 12px;
+      color: #444;
+    }
+
+    .tip-list li {
+      margin-bottom: 4px;
+    }
   </style>
 
   {% block extra_css %}{% endblock %}
@@ -188,8 +331,6 @@
     </ul>
 
     <div class="nav-right">
-      <!-- 🛒 CART WITH COUNT -->
-    
       <a href="{% url 'cart_details' %}" class="cart-link">
         <span>🛒 Cart</span>
         <span class="cart-count">{{ cart_count|default:"0" }}</span>
@@ -222,7 +363,117 @@
     {% block content %}{% endblock %}
   </main>
 
+  <!-- CHATBOT -->
+  <div id="chatbot">
+    <button class="toggle" onclick="toggleChat()">💬 Chat</button>
+
+    <div class="box" id="chatBox">
+      <div class="header">Glamio Style Assistant</div>
+
+      <div class="messages" id="chatMessages">
+        <div class="msg bot">
+          <span class="bubble">
+            Hi 😊 Ask me things like:<br>
+            “office wear under 1500”<br>
+            “black cotton dress”<br>
+            “party wear red outfit”
+          </span>
+        </div>
+      </div>
+
+      <div class="input">
+        <input id="chatInput" type="text" placeholder="Ask for outfits..."
+          onkeydown="if(event.key==='Enter'){sendChat();}">
+        <button class="send" onclick="sendChat()">Send</button>
+      </div>
+    </div>
+  </div>
+
   {% block extra_js %}{% endblock %}
+
+  <script>
+    function toggleChat() {
+      const box = document.getElementById("chatBox");
+      box.style.display = (!box.style.display || box.style.display === "none") ? "block" : "none";
+    }
+
+    function addMessage(text, who = "bot") {
+      const area = document.getElementById("chatMessages");
+      const div = document.createElement("div");
+      div.className = "msg " + who;
+      div.innerHTML = `<span class="bubble">${text}</span>`;
+      area.appendChild(div);
+      area.scrollTop = area.scrollHeight;
+    }
+
+    function addProductCard(p) {
+      const area = document.getElementById("chatMessages");
+      const div = document.createElement("div");
+      div.className = "p-card";
+
+      const img = p.image
+        ? `<img src="${p.image}" alt="${p.name}">`
+        : `<img src="https://via.placeholder.com/65" alt="No image">`;
+
+      let tipsHtml = "";
+      if (p.styling_tips && p.styling_tips.length) {
+        tipsHtml = "<ul class='tip-list'>" +
+          p.styling_tips.map(t => `<li>${t}</li>`).join("") +
+          "</ul>";
+      }
+
+      div.innerHTML = `
+        ${img}
+        <div>
+          <a href="${p.detail_url}">${p.name}</a>
+          <div class="p-price">₹ ${p.price}</div>
+          ${tipsHtml}
+        </div>
+      `;
+
+      area.appendChild(div);
+      area.scrollTop = area.scrollHeight;
+    }
+
+    async function sendChat() {
+      const input = document.getElementById("chatInput");
+      const msg = input.value.trim();
+
+      if (!msg) return;
+
+      addMessage(msg, "user");
+      input.value = "";
+
+      const form = new FormData();
+      form.append("message", msg);
+
+      try {
+        const response = await fetch("/chat/ask/", {
+          method: "POST",
+          body: form
+        });
+
+        const text = await response.text();
+        console.log("Raw response:", text);
+
+        if (!response.ok) {
+          addMessage(`Server error: ${response.status}`, "bot");
+          return;
+        }
+
+        const data = JSON.parse(text);
+
+        addMessage(data.reply || "Here are some options 👇", "bot");
+
+        if (data.products && data.products.length) {
+          data.products.forEach(addProductCard);
+        }
+      } catch (error) {
+        addMessage("Something went wrong while contacting the chatbot.", "bot");
+        console.error("Chatbot error:", error);
+      }
+    }
+  </script>
 </body>
 
 </html>

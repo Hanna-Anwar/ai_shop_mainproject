@@ -33,6 +33,8 @@ from wishlist_app.views import *
 
 from order_app.views import *
 
+from chatbot_app.views import *
+
 urlpatterns = [
 
     path('admin/', admin.site.urls),
@@ -99,6 +101,7 @@ urlpatterns = [
 
     # chatbot urls
 
-    path('chat/ask',)
+    path('chat/ask/',chat_ask,name="chat_ask")
+
  ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
